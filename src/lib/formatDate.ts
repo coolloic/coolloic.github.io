@@ -3,11 +3,20 @@ const MONTHS = [
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
 
+/**
+ * Accepts 'present', a bare year ('2022'), or a year and month ('2022-01').
+ *
+ * Year-only is a first-class case, not a fallback: most roles are dated to the
+ * year because the source did not support month precision, and rendering a
+ * month there would imply a certainty that does not exist.
+ */
 function formatOne(value: string): string {
   if (value === 'present') return 'Present';
   const [year, month] = value.split('-');
+  if (!year) return value;
+  if (month === undefined) return year;
   const index = Number(month) - 1;
-  if (!year || Number.isNaN(index) || index < 0 || index > 11) return year ?? value;
+  if (Number.isNaN(index) || index < 0 || index > 11) return year;
   return `${MONTHS[index]} ${year}`;
 }
 

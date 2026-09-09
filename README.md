@@ -11,15 +11,21 @@ page, the JSON-LD structured data, the meta tags and the print view together.
 
 ## Outstanding
 
-**Employment dates.** Five roles have `start: null` / `end: null` because the
-source CV did not include dates. Undated roles read as evasive to recruiters —
-fill them in using `YYYY-MM` format. Run `pnpm check:dates` to list them.
+**Employment dates are reconstructed.** Only Datarock was dated in the source
+CV; the rest come from a contiguous ordering Loic supplied and are deliberately
+year-only, because month precision would imply a certainty the source does not
+support. They should be checked against his actual record.
 
-**Inferred values.** Everything marked `VERIFY:` in `src/data/cv.ts` was
-inferred rather than sourced, and should be confirmed:
+Two known conflicts are unresolved: the public LinkedIn shows BNZ starting
+Aug 2018 and Aviat's ProVision Plus at Sep 2019, both later than the years
+currently shown.
 
-- current city (guessed from Auckland-based roles),
-- languages (LinkedIn listed English and Japanese only).
+`formatRange` accepts `'YYYY'`, `'YYYY-MM'` or `'present'`, so tightening any
+date to a real month is a one-value edit in `src/data/cv.ts`.
+
+**Inferred values.** Anything marked `VERIFY:` in `src/data/cv.ts` was inferred
+rather than sourced: the current city (guessed from Auckland-based roles) and
+the languages list (LinkedIn showed English and Japanese only).
 
 ## Commands
 
@@ -28,7 +34,7 @@ inferred rather than sourced, and should be confirmed:
 | `pnpm dev` | Local dev server on :4321 |
 | `pnpm build` | Type-check and build to `dist/` |
 | `pnpm test` | Playwright suite, including axe accessibility checks |
-| `pnpm check:dates` | Report roles still missing dates |
+| `pnpm check:dates` | Report any roles missing dates |
 
 ## Print
 

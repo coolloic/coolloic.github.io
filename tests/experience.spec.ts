@@ -7,12 +7,20 @@ import { formatRange } from '../src/lib/formatDate';
 const experience = (page: Page) =>
   page.locator('section[aria-labelledby="experience-heading"]');
 
-test('formatRange renders a readable range', () => {
+test('formatRange renders a year-only range', () => {
+  expect(formatRange('2022', '2026')).toBe('2022 – 2026');
+});
+
+test('formatRange still renders month precision when it is supplied', () => {
   expect(formatRange('2022-01', '2026-08')).toBe('Jan 2022 – Aug 2026');
 });
 
+test('formatRange handles mixed precision', () => {
+  expect(formatRange('2022', '2026-08')).toBe('2022 – Aug 2026');
+});
+
 test('formatRange renders present for a current role', () => {
-  expect(formatRange('2022-01', 'present')).toBe('Jan 2022 – Present');
+  expect(formatRange('2022', 'present')).toBe('2022 – Present');
 });
 
 test('formatRange returns null when a bound is missing', () => {
@@ -34,9 +42,10 @@ test('never renders the literal string null as a date', async ({ page }) => {
   await expect(page.locator('body')).not.toContainText('Invalid Date');
 });
 
-test('shows the dated Datarock range', async ({ page }) => {
+test('every role now shows a date range', async ({ page }) => {
   await page.goto('/');
-  await expect(experience(page).getByText('Jan 2022 – Aug 2026')).toBeVisible();
+  await expect(experience(page).locator('.role-dates')).toHaveCount(6);
+  await expect(experience(page).getByText('2022 – 2026')).toBeVisible();
 });
 
 test('shows the earlier career line', async ({ page }) => {

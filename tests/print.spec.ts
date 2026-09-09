@@ -22,10 +22,10 @@ test.describe('print', () => {
     await expect(block).toContainText(/800ms to 300ms/);
   });
 
-  test('all six roles are listed with the dated one showing its range', async ({ page }) => {
-    const roles = page.locator('.print-cv .pc-role');
-    await expect(roles).toHaveCount(6);
-    await expect(page.locator('.print-cv')).toContainText('Jan 2022 – Aug 2026');
+  test('all six roles are listed, each with a date range', async ({ page }) => {
+    await expect(page.locator('.print-cv .pc-role')).toHaveCount(6);
+    await expect(page.locator('.print-cv .pc-role-dates')).toHaveCount(6);
+    await expect(page.locator('.print-cv')).toContainText('2022 – 2026');
   });
 
   test('never prints the literal string null', async ({ page }) => {

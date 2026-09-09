@@ -5,17 +5,18 @@
  * view all derive from this file. Edit a fact here and it changes everywhere.
  *
  * ─────────────────────────────────────────────────────────────────────────
- * ACTION REQUIRED — EMPLOYMENT DATES
+ * EMPLOYMENT DATES — YEAR GRANULARITY, RECONSTRUCTED
  *
- * Roles below with `start: null` have no dates because the source CV did not
- * contain them. Undated roles read as evasive to recruiters, so these should
- * be filled in. Use 'YYYY-MM' format, e.g. start: '2021-03'. Use 'present'
- * for a current role's `end`.
+ * Only Datarock was dated in the source CV. The rest were reconstructed from
+ * a contiguous ordering Loic supplied, and are deliberately year-only: month
+ * precision would imply a certainty the source does not support.
  *
- * Run `pnpm check:dates` to list what is still missing.
+ * They should still be checked against his actual record. Two known conflicts
+ * remain unresolved — his public LinkedIn shows BNZ starting Aug 2018 and
+ * Aviat's ProVision Plus at Sep 2019, both later than the years below.
  *
- * Do not guess these values. A wrong employment date is worse than none.
- * ─────────────────────────────────────────────────────────────────────────
+ * `formatRange` accepts 'YYYY', 'YYYY-MM' or 'present', so tightening any of
+ * these to a real month is a one-value edit.
  */
 
 export interface Role {
@@ -107,8 +108,8 @@ const cv: CV = {
     {
       org: 'Datarock',
       title: 'Senior Software Engineer',
-      start: '2022-01',
-      end: '2026-08',
+      start: '2022',
+      end: '2026',
       engagement: null,
       location: 'New Zealand',
       summary:
@@ -128,8 +129,8 @@ const cv: CV = {
     {
       org: 'Docuvera',
       title: 'Software Engineer',
-      start: null,
-      end: null,
+      start: '2021',
+      end: '2022',
       engagement: 'Contract',
       location: null,
       summary:
@@ -147,8 +148,8 @@ const cv: CV = {
     {
       org: 'Mercury NZ',
       title: 'Senior API & Integration Developer',
-      start: null,
-      end: null,
+      start: '2020',
+      end: '2021',
       engagement: 'Contract',
       location: 'Auckland, New Zealand',
       summary:
@@ -166,8 +167,8 @@ const cv: CV = {
     {
       org: 'HazardCo',
       title: 'Senior Software Engineer',
-      start: null,
-      end: null,
+      start: '2019',
+      end: '2020',
       engagement: 'Contract',
       location: null,
       summary:
@@ -185,8 +186,8 @@ const cv: CV = {
     {
       org: 'Aviat Networks',
       title: 'Senior Software Engineer',
-      start: null,
-      end: null,
+      start: '2017',
+      end: '2019',
       engagement: 'Contract',
       location: null,
       summary:
@@ -204,8 +205,8 @@ const cv: CV = {
     {
       org: 'Bank of New Zealand',
       title: 'Java Full-stack Developer',
-      start: null,
-      end: null,
+      start: '2016',
+      end: '2017',
       engagement: null,
       location: 'New Zealand',
       summary:
