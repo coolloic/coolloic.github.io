@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://loicwong.github.io/sitemap-index.xml
