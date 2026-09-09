@@ -26,6 +26,8 @@ page that hedges between the two reads as indecision.
 
 - **Market:** Australia and New Zealand. Location and work rights appear above
   the fold, because AU recruiters filter on this before reading anything else.
+  The current city is to be read from the CV — the LinkedIn profile shows
+  Wellington-area and Auckland roles at different times and does not settle it.
 - **Tone:** plain and confident. No US-style superlatives.
 - **History depth:** the recent roles carry the page. Earlier career is
   represented by a single line so that the seniority claim stays credible
@@ -38,8 +40,10 @@ and each section's first line carries its point.
 
 ### 1. Hero
 - Name and positioning line.
-- Location and availability (Auckland; open to AU + NZ).
-- Three stats: 15+ years · React & Spring · 8 certifications.
+- Location and availability (city taken from the CV; open to AU + NZ).
+- Three stats: 15+ years · React & Spring · 9 certifications.
+  All three are derived from `src/data/cv.ts` rather than hardcoded, so the
+  counts cannot fall out of step with the content below them.
 - Primary call to action (contact), reachable in one click from the top.
 
 ### 2. Experience
@@ -158,6 +162,10 @@ entirely, which is not a sandbox setting that can be overridden from here.
 Implementation cannot produce the experience bullets or the case studies without
 it. The file needs to be copied somewhere readable, or its text supplied
 directly.
+
+Two specific values must come from the CV rather than being inferred: the
+current city, and the exact certification count used in the hero stat (nine were
+visible on LinkedIn, but the CV governs).
 
 ## Out of scope
 
