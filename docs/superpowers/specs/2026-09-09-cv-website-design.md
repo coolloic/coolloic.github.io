@@ -1,7 +1,7 @@
 # CV Website — Design Spec
 
 **Date:** 2026-09-09
-**Repo:** `loicwong.github.io` (GitHub Pages user site)
+**Repo:** `coolloic.github.io` (GitHub Pages user site)
 **Sources:** `CV.pdf` (10pp, authoritative) and the public LinkedIn profile
 (supplementary — certifications, education, languages only)
 **Status:** Approved design, pending implementation plan
@@ -206,7 +206,11 @@ Target: WCAG 2.1 AA.
 
 - JSON-LD `Person` structured data.
 - Canonical URL, Open Graph and Twitter card metadata.
-- `sitemap.xml` and `robots.txt`.
+- `sitemap.xml` and a generated `robots.txt`.
+
+The site URL is configured once, in `astro.config.mjs`. The canonical link,
+the JSON-LD and `robots.txt` all derive from it, so a host change cannot leave
+them disagreeing.
 
 ### Other
 

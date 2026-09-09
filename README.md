@@ -1,4 +1,4 @@
-# loicwong.github.io
+# coolloic.github.io
 
 Personal CV site. Astro, no client-side framework, no runtime JavaScript.
 
@@ -40,6 +40,12 @@ so neither layout compromises for the other's needs. The printed version leads
 with contact details and a Selected achievements block, and prints the strongest
 outcome bullets per role rather than all of them; see `PRINT_BULLETS` in that
 component to change how many.
+
+## Site URL
+
+`site` in `astro.config.mjs` is the single source. The canonical link, the
+JSON-LD and `robots.txt` all derive from it, so moving hosts (a custom domain,
+a different account) is a one-line change.
 
 ## Deployment
 

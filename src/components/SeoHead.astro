@@ -1,7 +1,7 @@
 ---
 import cv from '../data/cv';
 
-const canonical = 'https://loicwong.github.io/';
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -13,7 +13,7 @@ const jsonLd = {
   sameAs: [cv.linkedin],
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Auckland',
+    addressLocality: cv.location.split(',')[0].trim(),
     addressCountry: 'NZ',
   },
   description: cv.metaDescription,
