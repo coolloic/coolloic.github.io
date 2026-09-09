@@ -1,0 +1,60 @@
+---
+import cv from '../data/cv';
+---
+
+<section class="wrap" aria-labelledby="skills-heading">
+  <h2 id="skills-heading">Skills</h2>
+
+  <div class="groups">
+    {cv.skills.map((group) => (
+      <div class="group">
+        <h3>{group.label}</h3>
+        <ul class="chips">
+          {group.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style lang="scss">
+  section {
+    padding: clamp(2rem, 5vw, 3rem) 1.25rem;
+  }
+
+  h2 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0 0 2rem;
+  }
+
+  .group + .group {
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chips li {
+    padding: 0.25rem 0.65rem;
+    border-radius: 4px;
+    background: var(--chip);
+    font-size: 0.875rem;
+  }
+</style>

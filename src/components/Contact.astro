@@ -1,0 +1,61 @@
+---
+import cv from '../data/cv';
+
+// Split at build time so the served HTML holds no contiguous user@domain
+// string. This is a speed bump for naive harvesters, not protection.
+const [user, domain] = cv.email.split('@');
+---
+
+<section class="wrap contact" aria-labelledby="contact-heading">
+  <h2 id="contact-heading">Get in touch</h2>
+
+  <p class="pitch">
+    Available now for contract or permanent engineering lead and senior
+    engineering roles across New Zealand and Australia.
+  </p>
+
+  <ul class="links">
+    <li>
+      <a href={`mailto:${user}@${domain}`}>{user}<span aria-hidden="true">@</span>{domain}</a>
+    </li>
+    <li><a href={cv.linkedin} rel="me noopener">LinkedIn</a></li>
+  </ul>
+</section>
+
+<style lang="scss">
+  .contact {
+    padding: clamp(3rem, 7vw, 4.5rem) 1.25rem clamp(4rem, 9vw, 6rem);
+    border-top: 1px solid var(--rule);
+    margin-top: 2rem;
+  }
+
+  h2 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
+
+  .pitch {
+    margin: 0 0 1.75rem;
+    max-width: 34rem;
+    font-size: 1.125rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 540;
+  }
+</style>
