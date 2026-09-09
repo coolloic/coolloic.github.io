@@ -97,6 +97,11 @@ const roles = cv.roles.map((role) => ({
   .outcomes {
     margin: 0.9rem 0 0;
     padding-left: 1.15rem;
+    list-style: disc;
+  }
+
+  .outcomes li::marker {
+    color: var(--muted);
   }
 
   .outcomes li + li {
