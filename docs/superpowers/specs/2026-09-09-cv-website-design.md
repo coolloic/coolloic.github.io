@@ -152,8 +152,15 @@ naive scrapers, with no pretence that this defeats a determined one.
 
 The page gets exactly one memorable flourish, and it is the **print stylesheet**.
 
-Pressing Cmd+P produces a clean, properly typeset one-to-two page PDF CV:
-identical content, no navigation furniture, links resolved as footnotes.
+Pressing Cmd+P produces a clean, properly typeset three-page A4 PDF CV, with
+no navigation furniture and links resolved as footnotes.
+
+Two pages was the original target and is not reachable: six roles, four case
+studies, nine certifications and six skill groups do not fit two A4 pages
+without deleting real content. The print view therefore carries less than the
+screen wherever the screen version is a reading experience rather than CV
+content — case studies collapse to their Outcome, role summaries give way to
+their outcome bullets, and skill groups run as dense labelled lines.
 Recruiters routinely print or PDF a candidate page to forward to a hiring
 manager, almost no personal site handles this well, and the quality only reveals
 itself to someone who tries it.
@@ -217,7 +224,7 @@ The work is verified against these before it is called done.
 | axe-core violations | 0 |
 | Keyboard-only traversal | whole page reachable, focus always visible |
 | Rendering at 320px width | no horizontal scroll |
-| Cmd+P output | clean 1–2 page PDF |
+| Cmd+P output | clean PDF, 3 pages |
 
 ## Required input still outstanding
 

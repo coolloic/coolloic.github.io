@@ -2,9 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test('shows availability, location and engagement above the fold', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByText('Available now')).toBeVisible();
-  await expect(page.getByText('Auckland, New Zealand').first()).toBeVisible();
-  await expect(page.getByText('Open to contract or permanent')).toBeVisible();
+  // Scoped to the hero: the contact section repeats the availability wording.
+  const hero = page.locator('.hero');
+  await expect(hero.getByText('Available now')).toBeVisible();
+  await expect(hero.getByText(/Auckland, New Zealand/)).toBeVisible();
+  await expect(hero.getByText('Open to contract or permanent')).toBeVisible();
 });
 
 test('stat count matches the certification list length', async ({ page }) => {
