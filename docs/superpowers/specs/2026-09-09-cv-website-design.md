@@ -2,6 +2,8 @@
 
 **Date:** 2026-09-09
 **Repo:** `loicwong.github.io` (GitHub Pages user site)
+**Sources:** `CV.pdf` (10pp, authoritative) and the public LinkedIn profile
+(supplementary — certifications, education, languages only)
 **Status:** Approved design, pending implementation plan
 
 ## Purpose
@@ -16,22 +18,36 @@ undermined by decoration.
 
 ## Positioning
 
-The site sells one role: **Engineering Lead / Senior Front-End Engineer**.
-
-The record supports two readings — the certifications (PMP, PRINCE2, ITIL, CSM,
-ICAgile) suggest delivery management, while the recent work (React, Redux, RxJS,
-Spring, Mulesoft) suggests a hands-on senior engineer. The site commits to the
-combination: someone who both writes the hard code and leads its delivery. A
-page that hedges between the two reads as indecision.
+The site sells one role: **Engineering Lead / Senior Software Engineer**, with
+front-end depth over an AWS-native back end.
 
 - **Market:** Australia and New Zealand. Location and work rights appear above
   the fold, because AU recruiters filter on this before reading anything else.
-  The current city is to be read from the CV — the LinkedIn profile shows
-  Wellington-area and Auckland roles at different times and does not settle it.
+- **Engagement:** open to both contract and permanent. Hero copy stays neutral
+  between the two.
+- **Availability:** immediate. The Datarock role ended August 2026, and stating
+  availability plainly is worth more to a recruiter than any other single fact
+  on the page.
 - **Tone:** plain and confident. No US-style superlatives.
-- **History depth:** the recent roles carry the page. Earlier career is
-  represented by a single line so that the seniority claim stays credible
-  without adding scan weight.
+
+### A note on the front-end framing
+
+The brief asked the site to present front-end skills, and the front-end evidence
+is strong: React, React Query, Redux, RxJS, Next.js, Vue, Angular, AngularJS,
+NativeScript, D3.js, plus genuine rendering-performance work.
+
+But the CV's actual centre of gravity is broader than front-end — the Datarock
+role is full-stack with heavy AWS architecture, data migration and technical
+leadership. The positioning therefore leads with front-end depth without
+claiming front-end exclusivity, because the AWS and back-end record is a
+material part of the seniority argument and hiding it would weaken the page.
+
+### Handling the contractor pattern
+
+Five recent roles are contract engagements. The page frames this as deliberate
+breadth — repeatedly dropped into unfamiliar stacks and productive quickly —
+rather than leaving a permanent-role hiring manager to read it as instability.
+The four-year Datarock tenure is positioned to answer that concern directly.
 
 ## Content structure
 
@@ -40,42 +56,97 @@ and each section's first line carries its point.
 
 ### 1. Hero
 - Name and positioning line.
-- Location and availability (city taken from the CV; open to AU + NZ).
-- Three stats: 15+ years · React & Spring · 9 certifications.
-  All three are derived from `src/data/cv.ts` rather than hardcoded, so the
-  counts cannot fall out of step with the content below them.
+- Location, work rights, availability, and openness to contract or permanent.
+- Three stats, all derived from `src/data/cv.ts` so they cannot fall out of step
+  with the content below: years of experience, core stack, certification count.
 - Primary call to action (contact), reachable in one click from the top.
 
 ### 2. Experience
-Recent roles only — BNZ, Fonterra, Mercury NZ. Each entry carries role,
-organisation, dates, two to three **outcome** bullets, and technology chips.
-Bullets state what changed as a result of the work, not what the duties were.
+Roles from roughly 2018 onward, each with role, organisation, dates, two to
+three **outcome** bullets, and technology chips. Bullets state what changed as a
+result of the work, not what the duties were.
 
-The section closes with one line: *"Earlier: Wellington & Chengdu, 2007–2016."*
+1. **Datarock** — Senior Software Engineer, New Zealand, 2022 – Aug 2026
+2. **Docuvera** — Software Engineer (contract)
+3. **Mercury NZ** — Senior API / Integration Developer (contract)
+4. **HazardCo** — Senior Software Engineer (contract)
+5. **Aviat Networks** — Senior Software Engineer (contract)
+6. **Bank of New Zealand** — Java Full-stack Developer
+
+BNZ is included in full despite its age because it holds the only quantified
+outcomes in the record and anchors one of the case studies.
+
+The section closes with one line covering Dominion (delivering to Fonterra, IAG,
+Pulse Energy, Deloitte and Noel Leeming) and the earlier career from 2007.
+
+**Correction carried from an earlier draft:** Fonterra was a *client* served via
+Dominion, never an employer. It must never appear as a role. An earlier version
+of this spec, drawn from LinkedIn, made that error.
 
 ### 3. Problem case studies
-Two to three cards, each structured **Situation → Constraint → Approach →
-Outcome**. The Backbone-to-React migration is the anchor case.
+Four cards, each structured **Situation → Constraint → Approach → Outcome**,
+ordered so the two strongest land first:
+
+1. **Docuvera — LCP failure in a nested authoring platform.** Deeply nested
+   composite components caused a critical Largest Contentful Paint problem.
+   Analysed DOM structure and render cost, then designed and proved a
+   flattened-DOM plus virtual-scrolling approach by POC.
+2. **BNZ — authentication latency.** Mobile Internet Banking login reduced from
+   approximately 800ms to 300ms. A mobile OAuth solution for CIAM cut expected
+   contact-centre authentication service time from about five minutes to thirty
+   seconds.
+3. **Aviat Networks — topology visualisation at scale.** Diagrams of thousands
+   of nodes and links. Benchmarked D3, Vis, Paper, Cytoscape and NeXt, then
+   designed region-quadtree clustering and search to make the dataset tractable.
+4. **Aviat Networks — AngularJS 1.5 to Vue migration.** Designed a hybrid
+   frontend architecture permitting incremental migration, with middleware
+   letting Vue observe Angular model data while Angular subscribed to events
+   emitted by Vue.
 
 This section carries the brief's requirements for demonstrated learning ability
 and problem-solving attitude. Those claims are evidenced here rather than
-asserted anywhere else on the page — there is deliberately no learning timeline,
-no "how I work" statement, and no build colophon.
+asserted anywhere else — there is deliberately no learning timeline, no "how I
+work" statement, and no build colophon.
+
+The learning claim is further supported inside the experience bullets, where the
+CV's own language is retained: rapidly learned AEM 6.2 for commercial work,
+rapidly adopted ASP.NET Razor MVC, rapidly learned PHP and delivered to
+timeline, led the NativeScript 6 to 7 upgrade, ran POCs for Python 3.11 to 3.13
+and Serverless Framework 3 to 4.
 
 ### 4. Skills
-Grouped and honestly levelled: front-end lead, back-end, cloud, delivery.
+Grouped and honestly levelled:
+
+- **Front-end** — React, React Query, Redux, RxJS, Next.js, Vue, Angular,
+  AngularJS, NativeScript, D3.js, MUI, Tailwind, SCSS, Storybook, Webpack,
+  rendering performance and Core Web Vitals.
+- **Back-end** — TypeScript, Node.js, Java, Spring, Ts.ED, GraphQL and Apollo,
+  REST, OpenAPI, MuleSoft, APIGEE, Python.
+- **Cloud** — Lambda, API Gateway, ECS/Fargate, EC2, ECR, RDS, DynamoDB, S3,
+  SQS, SNS, EventBridge, Cognito, IAM, KMS, CloudWatch, X-Ray, CDK, Step
+  Functions, Serverless Framework, Docker.
+- **Data** — PostgreSQL, DynamoDB, Sequelize, query optimisation and indexing.
+- **Testing** — Jest, Enzyme, Playwright, Supertest, Pact/PactFlow, JUnit,
+  Mockito, Appium, RxJS Marble testing.
+- **Leadership and delivery** — mentoring, code review, technical design, Scrum,
+  CI/CD.
 
 No percentage bars or numeric proficiency scores. They carry no real information
 and read as junior.
 
 ### 5. Certifications
-Compact grid with dates and credential IDs.
+Compact grid with dates and credential IDs. Nine certifications: AWS Developer
+Associate, AWS Solutions Architect Associate, AWS Cloud Practitioner, PMP,
+PRINCE2 Practitioner, Certified ScrumMaster, ICAgile Certified Professional,
+ITIL Foundation, Oracle Certified Java Programmer.
 
 ### 6. Education and languages
-Two lines.
+UESTC — MSc 2012–2014, BSc 2002–2006. English and Japanese.
 
 ### 7. Contact
-Email, LinkedIn, GitHub.
+**Email and LinkedIn only.** GitHub is deliberately excluded at the user's
+request. The email address is rendered with light obfuscation against
+naive scrapers, with no pretence that this defeats a determined one.
 
 ## The signature moment
 
@@ -148,29 +219,26 @@ The work is verified against these before it is called done.
 | Rendering at 320px width | no horizontal scroll |
 | Cmd+P output | clean 1–2 page PDF |
 
-## Dependency: source content
+## Required input still outstanding
 
-The structure above is complete, but the values that populate `src/data/cv.ts`
-are not yet available.
+These values cannot be inferred and must be supplied before implementation
+produces the content file.
 
-The public LinkedIn profile yielded only partial data: a truncated About
-section, no dates for the Mercury NZ roles, and no achievements or outcomes for
-any role. The CV PDF at `~/Downloads/cv.pdf` cannot be read — macOS privacy
-protection (TCC) denies this terminal access to the `~/Downloads` directory
-entirely, which is not a sandbox setting that can be overridden from here.
-
-Implementation cannot produce the experience bullets or the case studies without
-it. The file needs to be copied somewhere readable, or its text supplied
-directly.
-
-Two specific values must come from the CV rather than being inferred: the
-current city, and the exact certification count used in the hero stat (nine were
-visible on LinkedIn, but the CV governs).
+1. **Employment dates.** Only Datarock is dated in the CV (2022 – Aug 2026).
+   Docuvera, Mercury NZ, HazardCo, Aviat Networks, BNZ and Dominion have no
+   dates, and LinkedIn's are contradictory. Month and year ranges are needed for
+   each. Undated roles read as evasive to recruiters.
+2. **Contact email.** To be confirmed explicitly, since publishing it to a
+   public page is the user's decision to make.
+3. **Current city**, for the location line.
+4. **Total years of experience**, to confirm the hero stat. The earliest role
+   appears to be around 2007, which would make it approximately 18 years.
 
 ## Out of scope
 
 - A blog or article section.
 - A contact form or any backend.
 - Analytics.
+- A GitHub link.
 - A learning timeline, a "how I work" statement, or a build colophon — all
   considered and deliberately excluded in favour of the case studies.
