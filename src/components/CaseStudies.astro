@@ -1,0 +1,154 @@
+---
+import cv from '../data/cv';
+
+type Part = 'situation' | 'constraint' | 'approach' | 'outcome';
+
+const parts: { label: string; key: Part }[] = [
+  { label: 'Situation', key: 'situation' },
+  { label: 'Constraint', key: 'constraint' },
+  { label: 'Approach', key: 'approach' },
+  { label: 'Outcome', key: 'outcome' },
+];
+---
+
+<section class="wrap" aria-labelledby="cases-heading">
+  <h2 id="cases-heading">Problems worth solving</h2>
+  <p class="lede">
+    Four problems where the interesting part was working out what was actually
+    wrong, not writing the fix.
+  </p>
+
+  {cv.caseStudies.map((cs) => (
+    <details class="case-study">
+      <summary>
+        <h3>{cs.title}</h3>
+        <span class="org">{cs.org}</span>
+      </summary>
+
+      <div class="body">
+        {parts.map((part) => (
+          <div class="part">
+            <p class="label">{part.label}</p>
+            <p class="text">{cs[part.key]}</p>
+          </div>
+        ))}
+
+        <ul class="chips" aria-label={`Technologies used: ${cs.title}`}>
+          {cs.tech.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </details>
+  ))}
+</section>
+
+<style lang="scss">
+  section {
+    padding: clamp(2rem, 5vw, 3rem) 1.25rem;
+  }
+
+  h2 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0 0 0.75rem;
+  }
+
+  .lede {
+    margin: 0 0 2rem;
+    color: var(--muted);
+    max-width: 34rem;
+  }
+
+  .case-study {
+    border-top: 1px solid var(--rule);
+
+    &:last-of-type {
+      border-bottom: 1px solid var(--rule);
+    }
+  }
+
+  summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.85rem;
+    min-height: 44px;
+    padding: 1.15rem 2rem 1.15rem 0;
+    cursor: pointer;
+    position: relative;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0.35rem;
+      top: 1.65rem;
+      width: 0.55rem;
+      height: 0.55rem;
+      border-right: 2px solid var(--muted);
+      border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg);
+      transition: transform 160ms ease;
+    }
+  }
+
+  .case-study[open] > summary::after {
+    transform: rotate(-135deg);
+  }
+
+  summary h3 {
+    display: inline;
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 570;
+  }
+
+  .org {
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  .body {
+    padding: 0 0 1.75rem;
+  }
+
+  .part + .part {
+    margin-top: 1.15rem;
+  }
+
+  .label {
+    margin: 0 0 0.2rem;
+    font-size: 0.75rem;
+    font-weight: 620;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+  }
+
+  .text {
+    margin: 0;
+    max-width: 38rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 1.4rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chips li {
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    background: var(--chip);
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+</style>
