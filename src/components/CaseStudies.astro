@@ -27,7 +27,7 @@ const parts: { label: string; key: Part }[] = [
 
       <div class="body">
         {parts.map((part) => (
-          <div class="part">
+          <div class={`part part--${part.key}`}>
             <p class="label">{part.label}</p>
             <p class="text">{cs[part.key]}</p>
           </div>

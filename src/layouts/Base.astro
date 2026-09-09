@@ -1,6 +1,10 @@
 ---
 import SeoHead from '../components/SeoHead.astro';
+// Order matters: print rules must come after the base rules to win on ties,
+// and Sass requires @use at the top of a file, so they are imported here
+// rather than chained inside global.scss.
 import '../styles/global.scss';
+import '../styles/print.scss';
 ---
 
 <!doctype html>
