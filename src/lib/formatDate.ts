@@ -29,5 +29,8 @@ function formatOne(value: string): string {
  */
 export function formatRange(start: string | null, end: string | null): string | null {
   if (start === null || end === null) return null;
-  return `${formatOne(start)} – ${formatOne(end)}`;
+  const from = formatOne(start);
+  const to = formatOne(end);
+  // A short role inside one year reads as "2022", not "2022 – 2022".
+  return from === to ? from : `${from} – ${to}`;
 }

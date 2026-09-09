@@ -11,14 +11,16 @@ page, the JSON-LD structured data, the meta tags and the print view together.
 
 ## Outstanding
 
-**Employment dates are reconstructed.** Only Datarock was dated in the source
-CV; the rest come from a contiguous ordering Loic supplied and are deliberately
-year-only, because month precision would imply a certainty the source does not
-support. They should be checked against his actual record.
+**Employment dates are partly reconstructed.** Datarock is dated from the
+source CV. BNZ and Aviat Networks are anchored on the public LinkedIn profile
+(BNZ from Jun/Aug 2018, Aviat's ProVision Plus from Sep 2019; LinkedIn marks
+both "Present", which is stale). The roles between them were shifted to stay
+contiguous.
 
-Two known conflicts are unresolved: the public LinkedIn shows BNZ starting
-Aug 2018 and Aviat's ProVision Plus at Sep 2019, both later than the years
-currently shown.
+That compresses five roles into 2018-2022 as roughly year-long stints, which
+fits four of them being contract engagements — but it is inference, not record,
+and is worth checking. Dates are deliberately year-only: month precision would
+imply a certainty the sources do not support.
 
 `formatRange` accepts `'YYYY'`, `'YYYY-MM'` or `'present'`, so tightening any
 date to a real month is a one-value edit in `src/data/cv.ts`.

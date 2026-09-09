@@ -15,6 +15,10 @@ test('formatRange still renders month precision when it is supplied', () => {
   expect(formatRange('2022-01', '2026-08')).toBe('Jan 2022 – Aug 2026');
 });
 
+test('formatRange collapses a range that starts and ends in one year', () => {
+  expect(formatRange('2022', '2022')).toBe('2022');
+});
+
 test('formatRange handles mixed precision', () => {
   expect(formatRange('2022', '2026-08')).toBe('2022 – Aug 2026');
 });
@@ -46,6 +50,7 @@ test('every role now shows a date range', async ({ page }) => {
   await page.goto('/');
   await expect(experience(page).locator('.role-dates')).toHaveCount(6);
   await expect(experience(page).getByText('2022 – 2026')).toBeVisible();
+  await expect(experience(page).getByText('2018 – 2019')).toBeVisible();
 });
 
 test('shows the earlier career line', async ({ page }) => {

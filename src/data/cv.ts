@@ -11,9 +11,12 @@
  * a contiguous ordering Loic supplied, and are deliberately year-only: month
  * precision would imply a certainty the source does not support.
  *
- * They should still be checked against his actual record. Two known conflicts
- * remain unresolved — his public LinkedIn shows BNZ starting Aug 2018 and
- * Aviat's ProVision Plus at Sep 2019, both later than the years below.
+ * BNZ and Aviat Networks are anchored on his public LinkedIn, which shows BNZ
+ * from Jun/Aug 2018 and Aviat's ProVision Plus from Sep 2019. (LinkedIn marks
+ * both "Present", which is stale — Datarock ran to Aug 2026.) The roles
+ * between them were shifted to stay contiguous, which compresses five roles
+ * into 2018-2022 as roughly year-long stints. That fits four of them being
+ * contract engagements, but it is inference, not record.
  *
  * `formatRange` accepts 'YYYY', 'YYYY-MM' or 'present', so tightening any of
  * these to a real month is a one-value edit.
@@ -144,7 +147,7 @@ const cv: CV = {
     {
       org: 'Docuvera',
       title: 'Software Engineer',
-      start: '2021',
+      start: '2022',
       end: '2022',
       engagement: 'Contract',
       location: null,
@@ -163,8 +166,8 @@ const cv: CV = {
     {
       org: 'Mercury NZ',
       title: 'Senior API & Integration Developer',
-      start: '2020',
-      end: '2021',
+      start: '2021',
+      end: '2022',
       engagement: 'Contract',
       location: 'Auckland, New Zealand',
       summary:
@@ -182,8 +185,8 @@ const cv: CV = {
     {
       org: 'HazardCo',
       title: 'Senior Software Engineer',
-      start: '2019',
-      end: '2020',
+      start: '2020',
+      end: '2021',
       engagement: 'Contract',
       location: null,
       summary:
@@ -201,8 +204,8 @@ const cv: CV = {
     {
       org: 'Aviat Networks',
       title: 'Senior Software Engineer',
-      start: '2017',
-      end: '2019',
+      start: '2019',
+      end: '2020',
       engagement: 'Contract',
       location: null,
       summary:
@@ -220,8 +223,8 @@ const cv: CV = {
     {
       org: 'Bank of New Zealand',
       title: 'Java Full-stack Developer',
-      start: '2016',
-      end: '2017',
+      start: '2018',
+      end: '2019',
       engagement: null,
       location: 'New Zealand',
       summary:
