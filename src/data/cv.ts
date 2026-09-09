@@ -36,6 +36,12 @@ export interface CaseStudy {
   id: string;
   title: string;
   org: string;
+  /**
+   * One-line form for the printed CV's Selected achievements block. Written
+   * separately because the web narrative below is paced for reading, and
+   * reusing it on a CV produces passive, wordy lines.
+   */
+  achievement: string;
   situation: string;
   constraint: string;
   approach: string;
@@ -92,8 +98,7 @@ const cv: CV = {
   engagement: 'Open to contract or permanent',
   yearsExperience: 18,
   coreStack: 'React & AWS',
-  // VERIFY: taken from session config. Change if you use a different address for job enquiries.
-  email: 'loicwong1982@gmail.com',
+  email: 'loic.wong@hotmail.com',
   linkedin: 'https://www.linkedin.com/in/loic-wong-49a66551/',
   metaDescription:
     'Engineering lead and senior software engineer in Auckland with 18 years across React, TypeScript and AWS. Available now for contract or permanent work in New Zealand and Australia.',
@@ -224,6 +229,8 @@ const cv: CV = {
   caseStudies: [
     {
       id: 'lcp',
+      achievement:
+        'Diagnosed a critical Largest Contentful Paint failure in a deeply nested document editor, and proved the fix — a flattened DOM with virtual scrolling — by proof of concept.',
       title: 'Fixing a Largest Contentful Paint failure in a nested document editor',
       org: 'Docuvera',
       situation:
@@ -238,6 +245,8 @@ const cv: CV = {
     },
     {
       id: 'auth',
+      achievement:
+        'Cut Mobile Internet Banking login latency from approximately 800ms to 300ms, and contact-centre authentication from about five minutes to thirty seconds.',
       title: 'Cutting banking authentication from minutes to seconds',
       org: 'Bank of New Zealand',
       situation:
@@ -252,6 +261,8 @@ const cv: CV = {
     },
     {
       id: 'topology',
+      achievement:
+        'Made interactive topology diagrams of thousands of nodes viable, benchmarking five visualisation libraries and designing region-quadtree clustering.',
       title: 'Rendering network topologies of thousands of nodes',
       org: 'Aviat Networks',
       situation:
@@ -266,6 +277,8 @@ const cv: CV = {
     },
     {
       id: 'migration',
+      achievement:
+        'Enabled a live AngularJS 1.5 application to migrate to Vue incrementally, through a hybrid architecture and middleware bridging both frameworks.',
       title: 'Migrating a live AngularJS application to Vue without a rewrite',
       org: 'Aviat Networks',
       situation:

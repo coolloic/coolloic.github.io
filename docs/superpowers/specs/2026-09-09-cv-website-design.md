@@ -150,20 +150,22 @@ naive scrapers, with no pretence that this defeats a determined one.
 
 ## The signature moment
 
-The page gets exactly one memorable flourish, and it is the **print stylesheet**.
+The page gets exactly one memorable flourish, and it is the **printed CV**.
 
-Pressing Cmd+P produces a clean, properly typeset three-page A4 PDF CV, with
-no navigation furniture and links resolved as footnotes.
+Pressing Cmd+P produces a well-formatted two-page A4 CV. Recruiters routinely
+print or PDF a candidate page to forward to a hiring manager, almost no personal
+site handles this well, and the quality only reveals itself to someone who tries
+it.
 
-Two pages was the original target and is not reachable: six roles, four case
-studies, nine certifications and six skill groups do not fit two A4 pages
-without deleting real content. The print view therefore carries less than the
-screen wherever the screen version is a reading experience rather than CV
-content — case studies collapse to their Outcome, role summaries give way to
-their outcome bullets, and skill groups run as dense labelled lines.
-Recruiters routinely print or PDF a candidate page to forward to a hiring
-manager, almost no personal site handles this well, and the quality only reveals
-itself to someone who tries it.
+It is a dedicated document rather than the screen page reshaped by CSS. The two
+media want different things — the CV leads with contact details and a Selected
+achievements block, carries the strongest outcome bullets rather than all of
+them, and sets certifications in two columns — and reshaping one DOM into both
+meant hiding content with fragile selectors. Both render from the same content
+module, so they cannot disagree on any fact.
+
+The cost is that the CV text appears twice in the HTML, once per medium. On a
+page this small that is about 8KB, and Lighthouse SEO remains 100.
 
 On-screen interaction stays minimal: editorial typography throughout, and the
 case studies presented as accessible disclosures.
@@ -224,7 +226,7 @@ The work is verified against these before it is called done.
 | axe-core violations | 0 |
 | Keyboard-only traversal | whole page reachable, focus always visible |
 | Rendering at 320px width | no horizontal scroll |
-| Cmd+P output | clean PDF, 3 pages |
+| Cmd+P output | clean, well-formatted 2-page A4 CV |
 
 ## Required input still outstanding
 

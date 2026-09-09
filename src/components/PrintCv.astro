@@ -1,0 +1,124 @@
+---
+import cv from '../data/cv';
+import { formatRange } from '../lib/formatDate';
+
+// How many outcome bullets each role contributes to the printed CV. Bullets in
+// cv.ts are ordered strongest first, so this trims the tail rather than the
+// substance. Recent roles earn more room than older ones; the total is what
+// keeps the CV to two pages.
+const PRINT_BULLETS = [3, 3, 2, 2, 2, 3];
+
+const roles = cv.roles.map((role, i) => ({
+  ...role,
+  range: formatRange(role.start, role.end),
+  printed: role.outcomes.slice(0, PRINT_BULLETS[i] ?? 2),
+}));
+
+const MONTHS = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+
+function certDate(value: string | null): string | null {
+  if (value === null) return null;
+  const [year, month] = value.split('-');
+  const index = Number(month) - 1;
+  if (!year || Number.isNaN(index) || index < 0 || index > 11) return year ?? null;
+  return `${MONTHS[index]} ${year}`;
+}
+
+const certs = cv.certifications.map((cert) => ({
+  ...cert,
+  when: certDate(cert.date),
+}));
+
+const contact = [cv.location, cv.availability, cv.engagement].join(' · ');
+
+// The CV leads with the quantified result; the web page leads with front-end
+// depth. Same four achievements, different first impression per medium.
+const ACHIEVEMENT_ORDER = ['auth', 'lcp', 'topology', 'migration'];
+const achievements = ACHIEVEMENT_ORDER.map(
+  (id) => cv.caseStudies.find((cs) => cs.id === id)!,
+);
+---
+
+<article class="print-cv" aria-hidden="true">
+  <header class="pc-header">
+    <h2 class="pc-name">{cv.name}</h2>
+    <p class="pc-title">{cv.positioning}</p>
+    <p class="pc-contact">{contact}</p>
+    <p class="pc-contact">
+      <span>{cv.email}</span>
+      <span>{cv.linkedin.replace(/^https:\/\/(www\.)?/, '')}</span>
+    </p>
+  </header>
+
+  <section class="pc-section pc-achievements">
+    <h3>Selected achievements</h3>
+    <ul>
+      {achievements.map((cs) => (
+        <li><strong>{cs.org}.</strong> {cs.achievement}</li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="pc-section">
+    <h3>Experience</h3>
+    {roles.map((role) => (
+      <div class="pc-role">
+        <p class="pc-role-head">
+          <span class="pc-role-title">{role.org} — {role.title}</span>
+          {role.range && <span class="pc-role-dates">{role.range}</span>}
+        </p>
+        {(role.engagement || role.location) && (
+          <p class="pc-role-sub">
+            {[role.engagement, role.location].filter(Boolean).join(' · ')}
+          </p>
+        )}
+        <ul>
+          {role.printed.map((o) => <li>{o}</li>)}
+        </ul>
+        <p class="pc-tech">{role.tech.join(' · ')}</p>
+      </div>
+    ))}
+    <p class="pc-earlier">{cv.earlierCareer}</p>
+  </section>
+
+  <section class="pc-section">
+    <h3>Skills</h3>
+    {cv.skills.map((group) => (
+      <p class="pc-skill">
+        <span class="pc-skill-label">{group.label}:</span> {group.items.join(' · ')}
+      </p>
+    ))}
+  </section>
+
+  <section class="pc-section">
+    <h3>Certifications</h3>
+    <ul class="pc-certs">
+      {certs.map((cert) => (
+        <li class="pc-cert">
+          <span class="pc-cert-name">{cert.name}</span>
+          <span class="pc-cert-meta">
+            {[cert.issuer, cert.when, cert.credentialId && `ID ${cert.credentialId}`]
+              .filter(Boolean)
+              .join(' · ')}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="pc-section pc-final">
+    <h3>Education &amp; languages</h3>
+    {cv.education.map((e) => (
+      <p class="pc-edu">
+        <span class="pc-skill-label">{e.qualification}:</span>
+        {e.institution}, {e.start}–{e.end}
+      </p>
+    ))}
+    <p class="pc-edu">
+      <span class="pc-skill-label">Languages:</span> {cv.languages.join(', ')}
+    </p>
+  </section>
+</article>

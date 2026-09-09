@@ -30,6 +30,7 @@ test('there are exactly four case studies, each fully populated', () => {
     expect(cs.constraint.length).toBeGreaterThan(0);
     expect(cs.approach.length).toBeGreaterThan(0);
     expect(cs.outcome.length).toBeGreaterThan(0);
+    expect(cs.achievement.length).toBeGreaterThan(0);
   }
 });
 

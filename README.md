@@ -19,7 +19,6 @@ fill them in using `YYYY-MM` format. Run `pnpm check:dates` to list them.
 inferred rather than sourced, and should be confirmed:
 
 - current city (guessed from Auckland-based roles),
-- contact email (taken from local config),
 - languages (LinkedIn listed English and Japanese only).
 
 ## Commands
@@ -33,10 +32,14 @@ inferred rather than sourced, and should be confirmed:
 
 ## Print
 
-`Cmd+P` produces a three-page A4 CV. The print view deliberately carries less
-than the screen where the screen version is a reading experience rather than CV
-content: case studies collapse to their Outcome, role summaries give way to
-their outcome bullets, and skill groups run as dense labelled lines.
+`Cmd+P` produces a well-formatted two-page A4 CV.
+
+The printed CV is its own document — `src/components/PrintCv.astro` — rendered
+from the same `src/data/cv.ts` as the screen page. Each medium hides the other,
+so neither layout compromises for the other's needs. The printed version leads
+with contact details and a Selected achievements block, and prints the strongest
+outcome bullets per role rather than all of them; see `PRINT_BULLETS` in that
+component to change how many.
 
 ## Deployment
 
