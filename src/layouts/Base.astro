@@ -1,0 +1,17 @@
+---
+import SeoHead from '../components/SeoHead.astro';
+import '../styles/global.scss';
+---
+
+<!doctype html>
+<html lang="en-NZ">
+  <head>
+    <SeoHead />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <main id="main">
+      <slot />
+    </main>
+  </body>
+</html>

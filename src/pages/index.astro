@@ -1,13 +1,8 @@
 ---
+import Base from '../layouts/Base.astro';
+import cv from '../data/cv';
 ---
-<!doctype html>
-<html lang="en-NZ">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Loic Wong</title>
-  </head>
-  <body>
-    <h1>Loic Wong</h1>
-  </body>
-</html>
+
+<Base>
+  <h1>{cv.name}</h1>
+</Base>
