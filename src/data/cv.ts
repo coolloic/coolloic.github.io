@@ -340,12 +340,12 @@ const cv: CV = {
   certifications: [
     { name: 'AWS Certified Developer – Associate', issuer: 'Amazon Web Services', date: '2019-07', credentialId: null },
     { name: 'AWS Certified Solutions Architect – Associate', issuer: 'Amazon Web Services', date: '2019-07', credentialId: null },
-    { name: 'AWS Certified Cloud Practitioner', issuer: 'Amazon Web Services', date: null, credentialId: null },
+    { name: 'AWS Certified Cloud Practitioner', issuer: 'Amazon Web Services', date: '2019-06', credentialId: null },
     { name: 'ICAgile Certified Professional', issuer: 'ICAgile', date: '2019-03', credentialId: null },
     { name: 'Project Management Professional (PMP)', issuer: 'Project Management Institute', date: '2015-07', credentialId: '1832195' },
-    { name: 'PRINCE2 Practitioner', issuer: 'AXELOS', date: '2015-04', credentialId: null },
-    { name: 'ITIL Foundation', issuer: 'AXELOS', date: '2015-04', credentialId: null },
-    { name: 'Certified ScrumMaster (CSM)', issuer: 'Scrum Alliance', date: '2015-03', credentialId: null },
+    { name: 'PRINCE2 Practitioner', issuer: 'AXELOS', date: '2015-04', credentialId: '03016516-01-C4X2' },
+    { name: 'ITIL Foundation', issuer: 'AXELOS', date: '2015-04', credentialId: '5331125.20387405' },
+    { name: 'Certified ScrumMaster (CSM)', issuer: 'Scrum Alliance', date: '2015-03', credentialId: '000401223' },
     { name: 'Oracle Certified Java Programmer', issuer: 'Oracle', date: '2012-03', credentialId: null },
   ],
 
