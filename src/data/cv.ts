@@ -58,6 +58,14 @@ export interface Certification {
   credentialId: string | null;
 }
 
+export interface Domain {
+  label: string;
+  /** What the work actually involved in this domain. */
+  detail: string;
+  /** Organisations the domain experience comes from. */
+  orgs: string[];
+}
+
 export interface SkillGroup {
   label: string;
   items: string[];
@@ -83,8 +91,15 @@ export interface CV {
   metaDescription: string;
   roles: Role[];
   earlierCareer: string;
+  domains: Domain[];
   caseStudies: CaseStudy[];
   skills: SkillGroup[];
+  /**
+   * Technologies rendered with visual emphasis in the skills section. This is
+   * "what he leads with", not a proficiency ranking — there is no evidence
+   * base for ranking, and inventing one would be worse than not emphasising.
+   */
+  coreSkills: string[];
   certifications: Certification[];
   education: Education[];
   languages: string[];
@@ -294,6 +309,54 @@ const cv: CV = {
     },
   ],
 
+  domains: [
+    {
+      label: 'Mining & geoscience',
+      detail: 'Machine-learning rock classification and imagery workflows.',
+      orgs: ['Datarock'],
+    },
+    {
+      label: 'Banking & fintech',
+      detail: 'Online banking, authentication, CIAM and cards.',
+      orgs: ['Bank of New Zealand'],
+    },
+    {
+      label: 'Energy & utilities',
+      detail: 'Billing notifications, wind offer services and SAP integration.',
+      orgs: ['Mercury NZ', 'Pulse Energy', 'Just Energy'],
+    },
+    {
+      label: 'Supply chain & retail planning',
+      detail: 'Enterprise supply-chain and retail planning systems.',
+      orgs: ['JDA', 'NZMP', 'Noel Leeming'],
+    },
+    {
+      label: 'Telecommunications',
+      detail: 'Network management and large-scale topology visualisation.',
+      orgs: ['Aviat Networks'],
+    },
+    {
+      label: 'Construction health & safety',
+      detail: 'Mobile and web platforms for on-site safety and compliance.',
+      orgs: ['HazardCo'],
+    },
+    {
+      label: 'Regulated content & compliance',
+      detail: 'Highly regulated document authoring and review.',
+      orgs: ['Docuvera'],
+    },
+    {
+      label: 'Insurance',
+      detail: 'Customer-facing web delivery and interactive visualisations.',
+      orgs: ['IAG'],
+    },
+    {
+      label: 'Dairy & FMCG',
+      detail: 'AEM platforms and interactive brand experiences.',
+      orgs: ['Fonterra'],
+    },
+  ],
+
   skills: [
     {
       label: 'Front-end',
@@ -313,7 +376,7 @@ const cv: CV = {
     {
       label: 'Cloud',
       items: [
-        'Lambda', 'API Gateway', 'ECS/Fargate', 'EC2', 'ECR', 'RDS', 'DynamoDB',
+        'AWS', 'Lambda', 'API Gateway', 'ECS/Fargate', 'EC2', 'ECR', 'RDS', 'DynamoDB',
         'S3', 'SQS', 'SNS', 'EventBridge', 'Cognito', 'IAM', 'KMS', 'CloudWatch',
         'X-Ray', 'CDK', 'Step Functions', 'Serverless Framework', 'Docker',
       ],
@@ -336,6 +399,10 @@ const cv: CV = {
         'Production troubleshooting',
       ],
     },
+  ],
+
+  coreSkills: [
+    'React', 'TypeScript', 'Node.js', 'AWS', 'Java', 'Spring', 'PostgreSQL',
   ],
 
   certifications: [

@@ -62,6 +62,11 @@ const achievements = ACHIEVEMENT_ORDER.map(
     </ul>
   </section>
 
+  <section class="pc-section pc-domains">
+    <h3>Domains</h3>
+    <p class="pc-domain-line">{cv.domains.map((d) => d.label).join(' · ')}</p>
+  </section>
+
   <section class="pc-section">
     <h3>Experience</h3>
     {roles.map((role) => (

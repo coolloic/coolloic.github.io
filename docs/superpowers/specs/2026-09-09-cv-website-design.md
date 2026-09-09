@@ -61,7 +61,18 @@ and each section's first line carries its point.
   with the content below: years of experience, core stack, certification count.
 - Primary call to action (contact), reachable in one click from the top.
 
-### 2. Experience
+### 2. Domains
+
+A grid of the industries the work spans — mining, banking, energy, supply
+chain, telecommunications, construction safety, regulated content, insurance,
+dairy — each naming what the work involved and which organisations it came
+from.
+
+Placed directly after the hero because breadth across regulated industries is
+the fastest-registering differentiator on the page, and it is otherwise
+invisible, buried inside individual role descriptions.
+
+### 3. Experience
 Roles from roughly 2018 onward, each with role, organisation, dates, two to
 three **outcome** bullets, and technology chips. Bullets state what changed as a
 result of the work, not what the duties were.
@@ -83,7 +94,7 @@ Pulse Energy, Deloitte and Noel Leeming) and the earlier career from 2007.
 Dominion, never an employer. It must never appear as a role. An earlier version
 of this spec, drawn from LinkedIn, made that error.
 
-### 3. Problem case studies
+### 4. Problem case studies
 Four cards, each structured **Situation → Constraint → Approach → Outcome**,
 ordered so the two strongest land first:
 
@@ -114,7 +125,7 @@ rapidly adopted ASP.NET Razor MVC, rapidly learned PHP and delivered to
 timeline, led the NativeScript 6 to 7 upgrade, ran POCs for Python 3.11 to 3.13
 and Serverless Framework 3 to 4.
 
-### 4. Skills
+### 5. Skills
 Grouped and honestly levelled:
 
 - **Front-end** — React, React Query, Redux, RxJS, Next.js, Vue, Angular,
@@ -131,19 +142,27 @@ Grouped and honestly levelled:
 - **Leadership and delivery** — mentoring, code review, technical design, Scrum,
   CI/CD.
 
-No percentage bars or numeric proficiency scores. They carry no real information
-and read as junior.
+Roles are presented on a vertical timeline rail, with a marker and year label
+per role and the current role's marker in the accent colour.
 
-### 5. Certifications
+Skills carry two tiers of emphasis: the technologies in `coreSkills` render
+larger and solid, the rest stay quiet but fully legible. This marks what he
+leads with rather than ranking proficiency.
+
+No percentage bars, and no conventional tag cloud. Size-varied clouds imply a
+proficiency ranking the record does not support, and their smallest terms fail
+contrast and target-size requirements.
+
+### 6. Certifications
 Compact grid with dates and credential IDs. Nine certifications: AWS Developer
 Associate, AWS Solutions Architect Associate, AWS Cloud Practitioner, PMP,
 PRINCE2 Practitioner, Certified ScrumMaster, ICAgile Certified Professional,
 ITIL Foundation, Oracle Certified Java Programmer.
 
-### 6. Education and languages
+### 7. Education and languages
 UESTC — MSc 2012–2014, BSc 2002–2006. English and Japanese.
 
-### 7. Contact
+### 8. Contact
 **Email and LinkedIn only.** GitHub is deliberately excluded at the user's
 request. The email address is rendered with light obfuscation against
 naive scrapers, with no pretence that this defeats a determined one.

@@ -98,6 +98,16 @@
     break-inside: avoid;
   }
 
+  // ── Domains ──────────────────────────────────────────────────────────────
+  .pc-domains {
+    break-inside: avoid;
+  }
+
+  .pc-domain-line {
+    margin: 0;
+    font-size: 8.5pt;
+  }
+
   // ── Experience ───────────────────────────────────────────────────────────
   .pc-role {
     margin: 0 0 2.6mm;

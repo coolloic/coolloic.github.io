@@ -1,5 +1,7 @@
 ---
 import cv from '../data/cv';
+
+const core = new Set(cv.coreSkills);
 ---
 
 <section class="wrap" aria-labelledby="skills-heading">
@@ -10,7 +12,9 @@ import cv from '../data/cv';
       <div class="group">
         <h3>{group.label}</h3>
         <ul class="chips">
-          {group.items.map((item) => <li>{item}</li>)}
+          {group.items.map((item) => (
+            <li class={core.has(item) ? 'is-core' : undefined}>{item}</li>
+          ))}
         </ul>
       </div>
     ))}
@@ -56,5 +60,16 @@ import cv from '../data/cv';
     border-radius: 4px;
     background: var(--chip);
     font-size: 0.875rem;
+  }
+
+  // Emphasis marks what he leads with, taken from cv.coreSkills. It is not a
+  // proficiency ranking, so the quieter chips stay fully legible rather than
+  // shrinking away as they would in a conventional tag cloud.
+  .chips li.is-core {
+    padding: 0.3rem 0.8rem;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 0.9375rem;
+    font-weight: 600;
   }
 </style>

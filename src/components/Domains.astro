@@ -1,0 +1,81 @@
+---
+import cv from '../data/cv';
+---
+
+<section class="wrap" aria-labelledby="domains-heading">
+  <h2 id="domains-heading">Domains</h2>
+  <p class="lede">
+    Eighteen years across regulated industries — each one a different set of
+    rules to learn before the code matters.
+  </p>
+
+  <ul class="domains">
+    {cv.domains.map((domain) => (
+      <li class="domain">
+        <h3>{domain.label}</h3>
+        <p class="detail">{domain.detail}</p>
+        <p class="orgs">{domain.orgs.join(' · ')}</p>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style lang="scss">
+  section {
+    padding: clamp(2rem, 5vw, 3rem) 1.25rem;
+  }
+
+  h2 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0 0 0.75rem;
+  }
+
+  .lede {
+    margin: 0 0 1.75rem;
+    color: var(--muted);
+    max-width: 34rem;
+  }
+
+  .domains {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .domain {
+    padding: 0.9rem 1rem 1rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--card);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 620;
+    letter-spacing: -0.01em;
+  }
+
+  .detail {
+    margin: 0.35rem 0 0;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+
+  // Not accent-coloured: these are labels, and blue text that cannot be
+  // clicked reads as a broken link.
+  .orgs {
+    margin: 0.7rem 0 0;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.8125rem;
+    font-weight: 560;
+    color: var(--fg);
+  }
+</style>

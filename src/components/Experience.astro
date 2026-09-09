@@ -14,10 +14,11 @@ const roles = cv.roles.map((role) => ({
   <ol class="roles">
     {roles.map((role) => (
       <li class="role">
+        {role.range && <p class="role-dates">{role.range}</p>}
+
         <h3>{role.org} — {role.title}</h3>
 
         <p class="role-meta">
-          {role.range && <span class="role-dates">{role.range}</span>}
           {role.engagement && <span class="tag">{role.engagement}</span>}
           {role.location && <span class="role-location">{role.location}</span>}
         </p>
@@ -51,22 +52,64 @@ const roles = cv.roles.map((role) => ({
     margin: 0 0 2rem;
   }
 
+  // Timeline rail. The spine is a border on the list and the markers are
+  // pseudo-elements, so the semantics stay an ordered list of roles.
   .roles {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 1.6rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  .role {
+    position: relative;
+  }
+
+  .role::before {
+    content: '';
+    position: absolute;
+    left: -2.05rem;
+    top: 0.42rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--muted);
+  }
+
+  // The most recent role is the one a recruiter cares about first.
+  .role:first-child::before {
+    background: var(--accent);
+    border-color: var(--accent);
   }
 
   .role + .role {
-    margin-top: 2.75rem;
-    padding-top: 2.75rem;
+    margin-top: 2.25rem;
+    padding-top: 2.25rem;
     border-top: 1px solid var(--rule);
+  }
+
+  .role + .role::before {
+    top: 2.67rem;
+  }
+
+  .role-dates {
+    margin: 0 0 0.15rem;
+    font-size: 0.8125rem;
+    font-weight: 620;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
   }
 
   h3 {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
+  }
+
+  .role-meta:empty {
+    display: none;
   }
 
   .role-meta {
@@ -77,10 +120,6 @@ const roles = cv.roles.map((role) => ({
     margin: 0.4rem 0 0;
     font-size: 0.9375rem;
     color: var(--muted);
-  }
-
-  .role-meta:empty {
-    display: none;
   }
 
   .tag {

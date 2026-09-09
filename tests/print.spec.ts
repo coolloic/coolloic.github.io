@@ -39,6 +39,13 @@ test.describe('print', () => {
     await expect(page.locator('.skip-link')).toBeHidden();
   });
 
+  test('domains are listed on the printed CV', async ({ page }) => {
+    const line = page.locator('.print-cv .pc-domain-line');
+    await expect(line).toBeVisible();
+    await expect(line).toContainText('Mining & geoscience');
+    await expect(line).toContainText('Supply chain & retail planning');
+  });
+
   test('certifications and education are present', async ({ page }) => {
     await expect(page.locator('.print-cv .pc-cert')).toHaveCount(9);
     await expect(page.locator('.print-cv')).toContainText('English, Japanese');
