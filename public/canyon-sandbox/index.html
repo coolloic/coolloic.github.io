@@ -1,0 +1,640 @@
+<!doctype html><html lang="en"><head><meta charset=utf-8><title>Canyon Physics Sandbox</title><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: instrument bench — a wide simulation stage on top, a control rack and live readouts beneath */
+:root{
+  --bg:#eef1ef; --panel:#ffffff; --fg:#1b2422; --muted:#5d6b67; --line:#d3dad7; --accent:#0f7a6c; --accent-ink:#ffffff;
+  --sky-top:#cfe0e3; --sky-bot:#eef3ef; --ground:#8b7b62; --ground-edge:#5e523f; --strata:#a39377;
+  --water:rgba(30,110,150,.42); --water-edge:#1d6a92; --ink:#1b2422;
+  --wood:#b07a43; --ice:#a9d9ea; --steel:#6d7a86; --rubber:#c2453a; --foam:#f0e3a8; --rope:#3d3326; --wind:rgba(27,36,34,.28);
+  --font-display:"Bricolage Grotesque", "IBM Plex Sans", system-ui, sans-serif;
+  --font-body:"IBM Plex Sans", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121816; --panel:#1a2220; --fg:#e4ebe8; --muted:#93a39e; --line:#2c3633; --accent:#3cc1ad; --accent-ink:#0b1412;
+  --sky-top:#0d1a22; --sky-bot:#1b2a2c; --ground:#4a4034; --ground-edge:#2a241c; --strata:#5a4f40;
+  --water:rgba(40,130,180,.40); --water-edge:#5ab4dc; --ink:#e4ebe8;
+  --wood:#c08a52; --ice:#9fd3e6; --steel:#9aa7b3; --rubber:#e0574b; --foam:#ece0a0; --rope:#c9b896; --wind:rgba(228,235,232,.22);
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#121816; --panel:#1a2220; --fg:#e4ebe8; --muted:#93a39e; --line:#2c3633; --accent:#3cc1ad; --accent-ink:#0b1412;
+  --sky-top:#0d1a22; --sky-bot:#1b2a2c; --ground:#4a4034; --ground-edge:#2a241c; --strata:#5a4f40;
+  --water:rgba(40,130,180,.40); --water-edge:#5ab4dc; --ink:#e4ebe8;
+  --wood:#c08a52; --ice:#9fd3e6; --steel:#9aa7b3; --rubber:#e0574b; --foam:#ece0a0; --rope:#c9b896; --wind:rgba(228,235,232,.22);
+  color-scheme:dark }
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:14px;line-height:1.5}
+.wrap{max-width:1240px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:grid;gap:16px}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3.4vw,34px);line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:4px 0 0;max-width:62ch}
+.seedbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seedbar label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+input[type=text]{font-family:var(--font-mono);font-size:13px;width:7.5em;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--fg)}
+button{font-family:var(--font-body);font-size:13px;font-weight:500;padding:7px 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stage{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--sky-bot)}
+canvas#sim{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
+.probe{position:absolute;top:10px;left:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:var(--font-mono);font-size:12px;line-height:1.55;min-width:15em;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.probe b{font-family:var(--font-body);font-weight:600;font-size:13px}
+.probe .ok{color:var(--accent)}
+.hint{position:absolute;right:10px;bottom:8px;font-size:12px;color:var(--muted);background:color-mix(in srgb,var(--panel) 80%,transparent);padding:2px 8px;border-radius:4px;pointer-events:none}
+.rack{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.group{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;gap:12px;min-width:0}
+.group h2{font-family:var(--font-display);font-weight:500;font-size:15px;margin:0;letter-spacing:.01em}
+.ctl{display:grid;gap:4px}
+.ctl .row{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.ctl .val{font-family:var(--font-mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:13px}
+.chip .sw{width:10px;height:10px;border-radius:2px;border:1px solid rgba(0,0,0,.25)}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel))}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.presets button{padding:4px 9px;font-size:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:13px}
+.stats div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding-bottom:3px}
+.stats span:last-child{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+canvas#spark{width:100%;height:46px;display:block}
+.lang{font-size:13px;color:var(--accent);text-decoration:none;padding:7px 4px}
+.lang:hover{text-decoration:underline}
+.note{font-size:12px;color:var(--muted);margin:0}
+.laws{font-size:13px;color:var(--muted);margin:0;padding-left:1.1em;display:grid;gap:4px}
+.laws code{font-family:var(--font-mono);font-size:12px;color:var(--fg)}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Canyon Physics Sandbox</h1>
+      <p class="sub">A procedurally generated canyon: terrain, a lake, a rope bridge, wind, a pendulum and objects of different materials. Buoyancy is integrated each frame from the submerged area, wind and water drag follow ½ρC<sub>d</sub>Av², and everything is converted to SI units (1 m = 50 px).</p>
+    </div>
+    <div class="seedbar">
+      <label for="seed">Seed</label>
+      <input id="seed" type="text" value="42071">
+      <button id="regen" class="primary">New scene</button>
+      <button id="reset">Reset</button>
+      <button id="pause">Pause</button>
+      <a href="zh/" lang="zh-CN" hreflang="zh-CN" class="lang">中文</a>
+    </div>
+  </header>
+
+  <div class="stage">
+    <canvas id="sim" width="1400" height="800" aria-label="Physics simulation canvas"></canvas>
+    <div class="probe" id="probe" hidden></div>
+    <div class="hint">Click empty space to place · drag objects · hover to inspect forces</div>
+  </div>
+
+  <div class="rack">
+    <section class="group">
+      <h2>Place objects</h2>
+      <div class="chips" id="mats"></div>
+      <div class="chips" id="shapes">
+        <button class="chip" data-shape="box" aria-pressed="true">Box</button>
+        <button class="chip" data-shape="ball" aria-pressed="false">Ball</button>
+        <button class="chip" data-shape="plank" aria-pressed="false">Plank</button>
+      </div>
+      <div class="ctl">
+        <div class="row"><label for="size">Size</label><span class="val" id="sizeV"></span></div>
+        <input id="size" type="range" min="16" max="80" value="40">
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Environment</h2>
+      <div class="ctl">
+        <div class="row"><label for="grav">Gravity</label><span class="val" id="gravV"></span></div>
+        <input id="grav" type="range" min="0" max="25" step="0.01" value="9.81">
+        <div class="presets"><button data-g="1.62">Moon</button><button data-g="3.71">Mars</button><button data-g="9.81">Earth</button><button data-g="24.79">Jupiter</button></div>
+      </div>
+      <div class="ctl">
+        <div class="row"><label for="wind">Wind speed (at 10 m reference height)</label><span class="val" id="windV"></span></div>
+        <input id="wind" type="range" min="-40" max="40" step="0.5" value="8">
+      </div>
+      <div class="ctl">
+        <div class="row"><label for="rho">Liquid density</label><span class="val" id="rhoV"></span></div>
+        <input id="rho" type="range" min="700" max="1400" step="5" value="1000">
+        <div class="presets"><button data-rho="789">Ethanol</button><button data-rho="1000">Fresh water</button><button data-rho="1025">Seawater</button><button data-rho="1240">Dead Sea</button></div>
+      </div>
+      <div class="ctl">
+        <div class="row"><label for="ts">Time scale</label><span class="val" id="tsV"></span></div>
+        <input id="ts" type="range" min="0.1" max="1" step="0.05" value="1">
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Readouts</h2>
+      <div class="stats">
+        <div><span>Dynamic bodies</span><span id="sBodies">0</span></div>
+        <div><span>Floating</span><span id="sFloat">0</span></div>
+        <div><span>Sunk</span><span id="sSunk">0</span></div>
+        <div><span>FPS</span><span id="sFps">0</span></div>
+        <div><span>Gust</span><span id="sGust">0</span></div>
+        <div><span>Kinetic energy</span><span id="sKE">0</span></div>
+      </div>
+      <canvas id="spark" aria-label="Total kinetic energy chart"></canvas>
+      <p class="note">Total kinetic energy of the system over the last 10 seconds (log scale) — you can see collisions, the pendulum and dissipation in the water.</p>
+      <ul class="laws">
+        <li>Buoyancy <code>F = ρ<sub>liq</sub>·g·A<sub>sub</sub>·1 m</code>, applied at the centroid of the submerged area, producing a righting torque</li>
+        <li>At floating equilibrium the submerged fraction ≈ <code>ρ<sub>obj</sub>/ρ<sub>liq</sub></code> (about 90% for ice)</li>
+        <li>Wind profile <code>V(z) = V<sub>10</sub>·(z/10)<sup>0.14</sup></code>, with gusts on top</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script>
+(() => {
+const { Engine, Bodies, Body, Composite, Constraint, Query, Vector } = Matter;
+const W = 1400, H = 800, PPM = 50;              // pixels per metre
+const RHO_AIR = 1.2;
+const SUB = 2, DT_MS = 1000 / 60 / SUB;          // two substeps per frame
+// mass_kg = density_matter*1e6 * area_px/2500 = 400*mass_matter ; weight_matter = mass_matter*g/9.81*0.001
+// so 1 N  ->  0.001 / (400*9.81) Matter units
+const N2M = 0.001 / (400 * 9.81);
+
+const MATS = {
+  foam:   { name:'Foam',   rho:30,   friction:0.8,  rest:0.3,  tok:'--foam',   cd:1.05 },
+  wood:   { name:'Wood',   rho:600,  friction:0.6,  rest:0.1,  tok:'--wood',   cd:1.05 },
+  ice:    { name:'Ice',    rho:917,  friction:0.02, rest:0.05, tok:'--ice',    cd:1.05 },
+  rubber: { name:'Rubber', rho:1100, friction:0.95, rest:0.8,  tok:'--rubber', cd:0.47 },
+  steel:  { name:'Steel',  rho:7850, friction:0.4,  rest:0.05, tok:'--steel',  cd:1.05 },
+};
+
+// ---------- state ----------
+let engine, world, terrain, water, anchors = [], ropes = [], spawned = [];
+let rhoLiquid = 1000, gAcc = 9.81, windRef = 8, timeScale = 1, paused = false;
+let selMat = 'wood', selShape = 'box', selSize = 40;
+let simTime = 0, gustNow = 0;
+let waves = null;
+const keHist = [];
+
+// ---------- seeded noise ----------
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function hashSeed(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function makeNoise(rng){const p=[];for(let i=0;i<512;i++)p.push(rng()*2-1);
+  return x=>{const i=Math.floor(x),f=x-i,u=f*f*(3-2*f);return p[i&511]*(1-u)+p[(i+1)&511]*u}}
+const smooth=(a,b,t)=>{t=Math.min(1,Math.max(0,t));t=t*t*(3-2*t);return a+(b-a)*t};
+
+// ---------- terrain generation ----------
+function genTerrain(seed){
+  const rng = mulberry32(hashSeed(seed));
+  const n = makeNoise(rng);
+  const fbm = x => n(x/140)*1 + n(x/55+31)*.45 + n(x/19+77)*.18;
+  const leftTop = 330 + rng()*70, rightTop = 400 + rng()*60;
+  const basinL = 270 + rng()*50, basinR = 810 + rng()*70;
+  const floor = 715 + rng()*35, waterY = 540 + rng()*45;
+  const towerX = basinR + 230 + rng()*90;
+  const hill = 90 + rng()*80;
+  const h = x => {
+    let y;
+    if (x < basinL) y = leftTop - hill*Math.pow(1 - x/basinL, 2) + fbm(x)*14;
+    else if (x < basinL + 70) y = smooth(h(basinL-0.01), floor, (x-basinL)/70);
+    else if (x < basinR - 70) y = floor + fbm(x)*16;
+    else if (x < basinR) y = smooth(floor + fbm(basinR-70)*16, rightTop, (x-(basinR-70))/70);
+    else y = rightTop + fbm(x)*22 - Math.max(0,(x-basinR-380))*0.12;
+    // flat pad for the tower
+    const d = Math.abs(x - towerX);
+    if (x > basinR && d < 110) { const pad = rightTop + fbm(towerX)*22; y = smooth(pad, y, (d-70)/40); }
+    return y;
+  };
+  // water extent: contiguous span around basin centre where ground is below the waterline
+  const mid = (basinL + basinR)/2;
+  let wx0 = mid, wx1 = mid;
+  while (wx0 > 0 && h(wx0) > waterY) wx0 -= 1;
+  while (wx1 < W && h(wx1) > waterY) wx1 += 1;
+  return { h, leftTop, rightTop, basinL, basinR, floor, waterY, wx0, wx1, towerX, rng };
+}
+
+function polyCentroid(v){let a=0,cx=0,cy=0;for(let i=0;i<v.length;i++){const p=v[i],q=v[(i+1)%v.length],c=p.x*q.y-q.x*p.y;a+=c;cx+=(p.x+q.x)*c;cy+=(p.y+q.y)*c}a*=.5;return{x:cx/(6*a),y:cy/(6*a),a:Math.abs(a)}}
+
+function makeBody(mat, shape, x, y, size, angle=0){
+  const m = MATS[mat];
+  const opts = { density: m.rho*1e-6, friction: m.friction, frictionStatic: m.friction*1.2, restitution: m.rest, frictionAir: 0.0005, angle };
+  let b;
+  if (shape === 'ball') b = Bodies.circle(x, y, size/2, opts);
+  else if (shape === 'plank') b = Bodies.rectangle(x, y, size*2.4, size*0.35, opts);
+  else b = Bodies.rectangle(x, y, size, size, opts);
+  b.plugin.mat = mat; b.plugin.shape = shape;
+  return b;
+}
+
+// ---------- scene ----------
+function build(seed){
+  engine = Engine.create({ positionIterations: 8, velocityIterations: 6, enableSleeping: false });
+  world = engine.world;
+  engine.gravity.y = gAcc/9.81;
+  engine.timing.timeScale = timeScale;
+  terrain = genTerrain(seed);
+  const T = terrain, rng = T.rng;
+  anchors = []; ropes = []; spawned = [];
+
+  // ground as convex trapezoids
+  const ground = [];
+  const step = 16;
+  for (let x = -40; x < W + 40; x += step){
+    const v = [{x, y:T.h(x)}, {x:x+step, y:T.h(x+step)}, {x:x+step, y:H+80}, {x, y:H+80}];
+    const c = polyCentroid(v);
+    const b = Bodies.fromVertices(c.x, c.y, [v], { isStatic:true, friction:0.8, frictionStatic:1, restitution:0.05 });
+    b.plugin.ground = true; ground.push(b);
+  }
+  ground.push(Bodies.rectangle(-60, H/2, 40, H*2, {isStatic:true}), Bodies.rectangle(W+60, H/2, 40, H*2, {isStatic:true}));
+  Composite.add(world, ground);
+
+  // water surface wave columns
+  const cols = Math.max(4, Math.round((T.wx1 - T.wx0)/8));
+  waves = { n: cols, h: new Float32Array(cols+1), v: new Float32Array(cols+1) };
+
+  // rope bridge
+  const aL = { x: T.basinL - 6, y: T.h(T.basinL - 6) - 3 };
+  const aR = { x: T.basinR + 6, y: T.h(T.basinR + 6) - 3 };
+  const dist = Vector.magnitude(Vector.sub(aR, aL));
+  const pw = 30, ang = Math.atan2(aR.y - aL.y, aR.x - aL.x);
+  const n = Math.round(dist / 34);
+  const jointLen = (dist*1.05 - n*pw) / (n+1);
+  const planks = [];
+  for (let i = 0; i < n; i++){
+    const t = (i + 0.5) / n;
+    const p = makeBody('wood', 'box', aL.x + (aR.x-aL.x)*t, aL.y + (aR.y-aL.y)*t, pw, ang);
+    Body.scale(p, 1, 8/pw);
+    p.collisionFilter.group = -7; p.plugin.plank = true;
+    planks.push(p);
+  }
+  Composite.add(world, planks);
+  const rope = (cfg) => { const c = Constraint.create(Object.assign({ stiffness: 0.9, damping: 0.05, render:{} }, cfg)); ropes.push(c); return c; };
+  const cons = [ rope({ pointA: aL, bodyB: planks[0], pointB: {x:-pw/2, y:0}, length: jointLen }) ];
+  for (let i = 0; i < n-1; i++) cons.push(rope({ bodyA: planks[i], pointA:{x:pw/2,y:0}, bodyB: planks[i+1], pointB:{x:-pw/2,y:0}, length: jointLen }));
+  cons.push(rope({ pointA: aR, bodyB: planks[n-1], pointB: {x:pw/2, y:0}, length: jointLen }));
+  Composite.add(world, cons);
+  anchors.push(aL, aR);
+
+  const dyn = [];
+  // crates dropping onto bridge
+  const bx = (aL.x + aR.x)/2;
+  dyn.push(makeBody('wood','box', bx - 60, aL.y - 140, 36), makeBody('rubber','ball', bx + 40, aL.y - 220, 30));
+
+  // floating & sinking things in the lake
+  const lw = T.wx1 - T.wx0;
+  const lake = (t) => T.wx0 + lw*t;
+  dyn.push(makeBody('wood','plank', lake(.2), T.waterY - 40, 34, 0.15));
+  dyn.push(makeBody('wood','box', lake(.38), T.waterY - 30, 44));
+  dyn.push(makeBody('ice','box', lake(.55), T.waterY - 60, 50, 0.4));
+  dyn.push(makeBody('ice','box', lake(.72), T.waterY - 20, 34));
+  dyn.push(makeBody('steel','box', lake(.62), T.waterY - 90, 30));
+  dyn.push(makeBody('foam','box', lake(.85), T.waterY - 50, 40));
+
+  // rubber balls on the left hill, rolling toward the cliff
+  for (let i = 0; i < 3; i++){ const x = 40 + i*55 + rng()*20; dyn.push(makeBody('rubber','ball', x, T.h(x) - 40, 22 + rng()*10)); }
+  dyn.push(makeBody('foam','box', 150, T.h(150) - 80, 30));
+
+  // tower on the right plateau
+  const base = Math.min(T.h(T.towerX-60), T.h(T.towerX), T.h(T.towerX+60)) - 1;
+  const bs = 38; let y = base - bs/2;
+  const pattern = ['wood','wood','ice','wood','foam','wood','ice','wood'];
+  for (let r = 0; r < 8; r++){
+    const off = (r % 2) ? bs/2 : 0;
+    const cols2 = r < 4 ? 3 : 2;
+    for (let c = 0; c < cols2; c++){
+      const x = T.towerX - ((cols2-1)*bs)/2 + c*bs + off*(cols2===2?0:0);
+      dyn.push(makeBody(pattern[(r+c)%pattern.length], 'box', x, y, bs-1));
+    }
+    y -= bs;
+  }
+
+  // wrecking-ball pendulum hanging from a gantry
+  const pivot = { x: T.towerX - 170, y: Math.max(60, T.rightTop - 330) };
+  const L = Math.min(300, base - pivot.y - 60);
+  const th = -1.05;
+  const ball = makeBody('steel','ball', pivot.x + Math.sin(th)*L, pivot.y + Math.cos(th)*L, 46);
+  dyn.push(ball);
+  Composite.add(world, rope({ pointA: pivot, bodyB: ball, length: L, stiffness: 1, damping: 0 }));
+  anchors.push(pivot);
+  terrain.gantry = pivot;
+
+  Composite.add(world, dyn);
+  simTime = 0; keHist.length = 0;
+}
+
+// ---------- forces ----------
+function clipBelow(verts, y0){
+  const out = [], n = verts.length;
+  for (let i = 0; i < n; i++){
+    const a = verts[i], b = verts[(i+1)%n];
+    const ain = a.y >= y0, bin = b.y >= y0;
+    if (ain) out.push(a);
+    if (ain !== bin){ const t = (y0 - a.y)/(b.y - a.y); out.push({ x: a.x + t*(b.x - a.x), y: y0 }); }
+  }
+  return out;
+}
+function surfaceAt(x){
+  const T = terrain;
+  if (x < T.wx0 || x > T.wx1) return null;
+  const i = Math.round((x - T.wx0)/(T.wx1 - T.wx0) * waves.n);
+  return T.waterY + waves.h[Math.max(0, Math.min(waves.n, i))];
+}
+function gust(t){ return 1 + 0.28*Math.sin(t*0.71) + 0.18*Math.sin(t*1.93+1.3) + 0.12*Math.sin(t*4.1+.4); }
+
+function applyForces(dtS){
+  const T = terrain;
+  gustNow = gust(simTime);
+  const bodies = Composite.allBodies(world);
+  for (const b of bodies){
+    if (b.isStatic) continue;
+    const mKg = b.mass * 400;
+    const v = Body.getVelocity(b);            // px per 16.67 ms
+    const vx = v.x * 1.2, vy = v.y * 1.2;     // m/s
+    b.plugin.sub = 0; b.plugin.fb = 0;
+
+    // --- buoyancy & hydrodynamic drag ---
+    const sy = surfaceAt(b.position.x);
+    let frac = 0;
+    if (sy !== null && b.bounds.max.y > sy){
+      const poly = clipBelow(b.vertices, sy);
+      if (poly.length >= 3){
+        const c = polyCentroid(poly);
+        const area = Math.min(c.a, b.area);
+        frac = area / b.area;
+        const Fb = rhoLiquid * gAcc * (area/2500);       // N  (1 m depth slab)
+        Body.applyForce(b, { x: c.x, y: c.y }, { x: 0, y: -Fb * N2M });
+        b.plugin.fb = Fb;
+        // quadratic drag ½ρCdAv², A = submerged projected width
+        const sp = Math.hypot(vx, vy);
+        if (sp > 1e-4){
+          const width = (b.bounds.max.x - b.bounds.min.x)/PPM;
+          const Fd = 0.5 * rhoLiquid * (MATS[b.plugin.mat]?.cd ?? 1) * width * frac * sp*sp + 40*frac*sp*mKg/100;
+          const k = Math.min(0.9, Fd * dtS / (mKg * sp));
+          Body.setVelocity(b, { x: v.x*(1-k), y: v.y*(1-k) });
+        }
+        Body.setAngularVelocity(b, b.angularVelocity * (1 - Math.min(0.5, 5*frac*dtS)));
+        // stir the surface
+        if (Math.abs(vy) > 0.3 && frac < 0.98){
+          const i = Math.round((b.position.x - T.wx0)/(T.wx1 - T.wx0) * waves.n);
+          for (let j = -2; j <= 2; j++){ const k2 = i + j; if (k2 >= 0 && k2 <= waves.n) waves.v[k2] += vy * 0.04 * Math.min(1, b.area/1600) * (1 - Math.abs(j)/3); }
+        }
+      }
+    }
+    b.plugin.sub = frac;
+
+    // --- wind (power-law profile + gusts) ---
+    if (windRef !== 0 && frac < 0.99){
+      const z = Math.max(0.3, (T.h(b.position.x) - b.position.y)/PPM);
+      const Vw = windRef * Math.pow(z/10, 0.14) * gustNow;
+      const rel = Vw - vx;
+      const hExp = (b.bounds.max.y - b.bounds.min.y)/PPM * (1 - frac);
+      const Fw = 0.5 * RHO_AIR * (MATS[b.plugin.mat]?.cd ?? 1) * hExp * rel * Math.abs(rel);
+      Body.applyForce(b, b.position, { x: Fw * N2M, y: 0 });
+    }
+  }
+  // wave springs
+  const wv = waves, kS = 0.02, damp = 0.03, spread = 0.18;
+  for (let i = 0; i <= wv.n; i++){ wv.v[i] += -kS*wv.h[i] - damp*wv.v[i]; }
+  for (let p = 0; p < 2; p++) for (let i = 0; i <= wv.n; i++){
+    if (i > 0) wv.v[i] += spread*(wv.h[i-1]-wv.h[i]);
+    if (i < wv.n) wv.v[i] += spread*(wv.h[i+1]-wv.h[i]);
+  }
+  for (let i = 0; i <= wv.n; i++) wv.h[i] = Math.max(-30, Math.min(30, wv.h[i] + wv.v[i]));
+}
+
+// ---------- rendering ----------
+const cv = document.getElementById('sim'), ctx = cv.getContext('2d');
+let col = {};
+function readColors(){ const s = getComputedStyle(document.documentElement);
+  for (const k of ['--sky-top','--sky-bot','--ground','--ground-edge','--strata','--water','--water-edge','--ink','--wood','--ice','--steel','--rubber','--foam','--rope','--wind','--accent','--panel','--muted']) col[k] = s.getPropertyValue(k).trim(); }
+function resize(){
+  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.width * H/W * dpr);
+  cv.style.height = (r.width * H/W) + 'px';
+}
+const streaks = Array.from({length: 90}, () => ({ x: Math.random()*W, y: Math.random()*H, l: 0.5 + Math.random() }));
+
+function draw(){
+  const s = cv.width / W;
+  ctx.setTransform(s,0,0,s,0,0);
+  const T = terrain;
+  const g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,col['--sky-top']); g.addColorStop(1,col['--sky-bot']);
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+  // wind streaks
+  ctx.strokeStyle = col['--wind']; ctx.lineWidth = 1.2;
+  const dir = Math.sign(windRef);
+  if (windRef !== 0){
+    ctx.beginPath();
+    for (const p of streaks){
+      if (p.y > T.h(p.x) - 4) continue;
+      const len = Math.min(60, Math.abs(windRef)*1.6*gustNow) * p.l;
+      ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - dir*len, p.y);
+    }
+    ctx.stroke();
+  }
+
+  // water body (drawn under ground so ground masks edges)
+  ctx.fillStyle = col['--water'];
+  ctx.beginPath();
+  ctx.moveTo(T.wx0, H);
+  for (let i = 0; i <= waves.n; i++) ctx.lineTo(T.wx0 + (T.wx1-T.wx0)*i/waves.n, T.waterY + waves.h[i]);
+  ctx.lineTo(T.wx1, H); ctx.closePath(); ctx.fill();
+
+  // ground
+  ctx.fillStyle = col['--ground'];
+  ctx.beginPath(); ctx.moveTo(0, H);
+  for (let x = 0; x <= W; x += 6) ctx.lineTo(x, T.h(x));
+  ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
+  // strata lines
+  ctx.save(); ctx.clip();
+  ctx.strokeStyle = col['--strata']; ctx.lineWidth = 2;
+  for (let k = 1; k < 9; k++){ ctx.beginPath(); for (let x = 0; x <= W; x += 10){ const y = T.h(x) + k*26 + Math.sin(x/90+k)*5; x ? ctx.lineTo(x,y) : ctx.moveTo(x,y); } ctx.stroke(); }
+  ctx.restore();
+  ctx.strokeStyle = col['--ground-edge']; ctx.lineWidth = 3;
+  ctx.beginPath(); for (let x = 0; x <= W; x += 6){ x ? ctx.lineTo(x, T.h(x)) : ctx.moveTo(x, T.h(x)); } ctx.stroke();
+
+  // gantry
+  const gp = T.gantry;
+  ctx.strokeStyle = col['--steel']; ctx.lineWidth = 6; ctx.lineCap = 'round';
+  const footL = gp.x - 70, footR = gp.x + 70;
+  ctx.beginPath(); ctx.moveTo(footL, T.h(footL)); ctx.lineTo(gp.x - 20, gp.y); ctx.lineTo(gp.x + 20, gp.y); ctx.lineTo(footR, T.h(footR)); ctx.stroke();
+
+  // ropes
+  ctx.strokeStyle = col['--rope']; ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (const c of ropes){ const a = Constraint.pointAWorld(c), b = Constraint.pointBWorld(c); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); }
+  ctx.stroke();
+  // bridge hand-rope
+  ctx.globalAlpha = .55; ctx.beginPath();
+  for (const c of ropes){ if (!c.bodyB || !c.bodyB.plugin.plank) continue; const b = Constraint.pointBWorld(c); ctx.lineTo(b.x, b.y - 26); }
+  ctx.stroke(); ctx.globalAlpha = 1;
+  ctx.fillStyle = col['--rope'];
+  for (const a of anchors){ ctx.beginPath(); ctx.arc(a.x, a.y, 4, 0, 7); ctx.fill(); }
+
+  // bodies
+  for (const b of Composite.allBodies(world)){
+    if (b.isStatic) continue;
+    const m = MATS[b.plugin.mat];
+    ctx.fillStyle = col[m.tok]; ctx.strokeStyle = col['--ink']; ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    const v = b.vertices; ctx.moveTo(v[0].x, v[0].y); for (let i = 1; i < v.length; i++) ctx.lineTo(v[i].x, v[i].y); ctx.closePath();
+    ctx.fill(); ctx.globalAlpha = .55; ctx.stroke(); ctx.globalAlpha = 1;
+    if (b.plugin.shape === 'ball'){ // spin marker
+      ctx.strokeStyle = col['--ink']; ctx.globalAlpha = .4; ctx.beginPath();
+      ctx.moveTo(b.position.x, b.position.y); ctx.lineTo(b.position.x + Math.cos(b.angle)*b.circleRadius*.8, b.position.y + Math.sin(b.angle)*b.circleRadius*.8); ctx.stroke(); ctx.globalAlpha = 1;
+    }
+    if (b === hoverBody){ ctx.strokeStyle = col['--accent']; ctx.lineWidth = 2.5; ctx.stroke(); }
+  }
+
+  // water surface line on top
+  ctx.strokeStyle = col['--water-edge']; ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let i = 0; i <= waves.n; i++){ const x = T.wx0 + (T.wx1-T.wx0)*i/waves.n, y = T.waterY + waves.h[i]; i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); }
+  ctx.stroke();
+
+  // drag line
+  if (drag){ const a = drag.pointA, b = Constraint.pointBWorld(drag); ctx.strokeStyle = col['--accent']; ctx.setLineDash([5,4]); ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); ctx.setLineDash([]); }
+
+  // scale bar
+  ctx.fillStyle = col['--ink']; ctx.strokeStyle = col['--ink']; ctx.lineWidth = 2;
+  const sx = W - 140, sy = 34;
+  ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + 2*PPM, sy); ctx.moveTo(sx, sy-6); ctx.lineTo(sx, sy+6); ctx.moveTo(sx+PPM, sy-4); ctx.lineTo(sx+PPM, sy+4); ctx.moveTo(sx+2*PPM, sy-6); ctx.lineTo(sx+2*PPM, sy+6); ctx.stroke();
+  ctx.font = '500 15px "IBM Plex Mono", monospace'; ctx.textAlign = 'center';
+  ctx.fillText('2 m', sx + PPM, sy - 12);
+  // wind sock readout
+  ctx.textAlign = 'left';
+  ctx.fillText(`Wind ${(windRef*gustNow).toFixed(1)} m/s ${windRef>0?'→':windRef<0?'←':''}`, 20, 32);
+  ctx.fillText(`g ${gAcc.toFixed(2)} m/s²  ρ liquid ${rhoLiquid} kg/m³`, 20, 54);
+}
+
+// ---------- interaction ----------
+let drag = null, hoverBody = null, pointer = null;
+const probe = document.getElementById('probe');
+function toWorld(e){ const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left)/r.width*W, y: (e.clientY - r.top)/r.height*H }; }
+function dynAt(p){ return Query.point(Composite.allBodies(world).filter(b => !b.isStatic), p)[0] || null; }
+cv.addEventListener('pointerdown', e => {
+  const p = toWorld(e); cv.setPointerCapture(e.pointerId);
+  const b = dynAt(p);
+  if (b){
+    const local = Vector.rotate(Vector.sub(p, b.position), -b.angle);
+    drag = Constraint.create({ pointA: {x:p.x,y:p.y}, bodyB: b, pointB: Vector.rotate(local, b.angle), length: 0, stiffness: 0.08, damping: 0.1 });
+    drag._local = local; Composite.add(world, drag);
+  } else {
+    const nb = makeBody(selMat, selShape, p.x, p.y, selSize);
+    if (Query.collides(nb, Composite.allBodies(world).filter(x=>x.plugin.ground)).length) return;
+    Composite.add(world, nb); spawned.push(nb);
+    if (spawned.length > 120){ Composite.remove(world, spawned.shift()); }
+  }
+});
+cv.addEventListener('pointermove', e => { pointer = toWorld(e); if (drag){ drag.pointA.x = pointer.x; drag.pointA.y = pointer.y; } });
+const endDrag = () => { if (drag){ Composite.remove(world, drag); drag = null; } };
+cv.addEventListener('pointerup', endDrag); cv.addEventListener('pointercancel', endDrag);
+cv.addEventListener('pointerleave', () => { pointer = null; });
+
+function updateProbe(){
+  hoverBody = pointer ? dynAt(pointer) : null;
+  if (!hoverBody || !pointer){ probe.hidden = true; return; }
+  const b = hoverBody, m = MATS[b.plugin.mat];
+  const mKg = b.mass*400, Wt = mKg*gAcc, fb = b.plugin.fb || 0, sp = Body.getSpeed(b)*1.2;
+  const eq = m.rho / rhoLiquid;
+  const floats = eq < 1;
+  probe.innerHTML = `<b>${m.name}</b> · ρ ${m.rho} kg/m³<br>Mass ${fmt(mKg)} kg · speed ${sp.toFixed(2)} m/s<br>Weight ${fmt(Wt)} N<br>Buoyancy ${fmt(fb)} N (${Wt? (fb/Wt*100).toFixed(0):0}%)<br>Submerged ${((b.plugin.sub||0)*100).toFixed(0)}% · equilibrium ${floats ? '<span class="ok">floats, '+(eq*100).toFixed(0)+'% submerged</span>' : 'sinks'}`;
+  probe.hidden = false;
+  // keep panel away from cursor
+  const r = cv.getBoundingClientRect();
+  const left = (pointer.x/W) < 0.5;
+  probe.style.left = left ? 'auto' : '10px'; probe.style.right = left ? '10px' : 'auto';
+}
+const fmt = v => v >= 1e6 ? (v/1e6).toFixed(2)+'M' : v >= 1e3 ? (v/1e3).toFixed(1)+'k' : v.toFixed(0);
+
+// ---------- loop ----------
+let last = performance.now(), fpsAcc = 0, fpsN = 0, frame = 0;
+const spark = document.getElementById('spark'), sctx = spark.getContext('2d');
+function stats(){
+  let nb = 0, fl = 0, sk = 0, ke = 0;
+  for (const b of Composite.allBodies(world)){
+    if (b.isStatic) continue; nb++;
+    const sp = Body.getSpeed(b)*1.2; ke += 0.5*b.mass*400*sp*sp;
+    if (b.plugin.plank) continue;
+    if (b.plugin.sub > 0.02){ if (b.plugin.sub > 0.97 && b.position.y > terrain.waterY + 60 && sp < 0.3) sk++; else fl++; }
+    if (b.position.y > H + 200){ Composite.remove(world, b); }
+  }
+  keHist.push(ke); if (keHist.length > 150) keHist.shift();
+  document.getElementById('sBodies').textContent = nb;
+  document.getElementById('sFloat').textContent = fl;
+  document.getElementById('sSunk').textContent = sk;
+  document.getElementById('sGust').textContent = '×' + gustNow.toFixed(2);
+  document.getElementById('sKE').textContent = fmt(ke) + ' J';
+  drawSpark();
+}
+function drawSpark(){
+  const r = spark.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio||1);
+  if (spark.width !== Math.round(r.width*dpr)){ spark.width = Math.round(r.width*dpr); spark.height = Math.round(46*dpr); }
+  const w = spark.width, h = spark.height; sctx.clearRect(0,0,w,h);
+  if (keHist.length < 2) return;
+  const lg = keHist.map(v => Math.log10(v + 1)); const mx = Math.max(...lg, 1), mn = Math.min(...lg);
+  const X = i => i/(150-1)*w, Y = v => h - 3*dpr - (v - mn)/(mx - mn || 1)*(h - 8*dpr);
+  sctx.beginPath(); lg.forEach((v,i) => i ? sctx.lineTo(X(i),Y(v)) : sctx.moveTo(X(i),Y(v)));
+  sctx.lineTo(X(lg.length-1), h); sctx.lineTo(0, h); sctx.closePath();
+  sctx.fillStyle = col['--accent']; sctx.globalAlpha = .14; sctx.fill(); sctx.globalAlpha = 1;
+  sctx.beginPath(); lg.forEach((v,i) => i ? sctx.lineTo(X(i),Y(v)) : sctx.moveTo(X(i),Y(v)));
+  sctx.strokeStyle = col['--accent']; sctx.lineWidth = 1.5*dpr; sctx.stroke();
+  sctx.fillStyle = col['--accent']; sctx.beginPath(); sctx.arc(X(lg.length-1), Y(lg[lg.length-1]), 2.5*dpr, 0, 7); sctx.fill();
+}
+function tick(now){
+  const dt = Math.min(50, now - last); last = now;
+  fpsAcc += dt; fpsN++;
+  if (!paused){
+    for (let i = 0; i < SUB; i++){
+      applyForces(DT_MS/1000 * timeScale);
+      Engine.update(engine, DT_MS);
+      simTime += DT_MS/1000 * timeScale;
+    }
+    const sp = windRef * gustNow * 1.2;
+    for (const p of streaks){ p.x += sp*p.l; if (p.x > W+60) { p.x = -60; p.y = Math.random()*H; } if (p.x < -60) { p.x = W+60; p.y = Math.random()*H; } }
+  }
+  if (frame % 4 === 0) updateProbe();
+  if (frame % 4 === 0 && !paused) stats();
+  if (fpsAcc > 500){ document.getElementById('sFps').textContent = Math.round(fpsN*1000/fpsAcc); fpsAcc = 0; fpsN = 0; }
+  draw(); frame++;
+  requestAnimationFrame(tick);
+}
+
+// ---------- controls ----------
+const $ = id => document.getElementById(id);
+const matBox = $('mats');
+for (const [k, m] of Object.entries(MATS)){
+  const b = document.createElement('button'); b.className = 'chip'; b.dataset.mat = k; b.setAttribute('aria-pressed', k === selMat);
+  b.innerHTML = `<span class="sw" style="background:var(${m.tok})"></span>${m.name}`;
+  b.onclick = () => { selMat = k; matBox.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b)); };
+  matBox.appendChild(b);
+}
+$('shapes').querySelectorAll('.chip').forEach(b => b.onclick = () => { selShape = b.dataset.shape; $('shapes').querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b)); });
+function sync(){
+  selSize = +$('size').value; $('sizeV').textContent = (selSize/PPM).toFixed(2) + ' m';
+  gAcc = +$('grav').value; $('gravV').textContent = gAcc.toFixed(2) + ' m/s²'; if (engine) engine.gravity.y = gAcc/9.81;
+  windRef = +$('wind').value; $('windV').textContent = windRef.toFixed(1) + ' m/s';
+  rhoLiquid = +$('rho').value; $('rhoV').textContent = rhoLiquid + ' kg/m³';
+  timeScale = +$('ts').value; $('tsV').textContent = '×' + timeScale.toFixed(2); if (engine) engine.timing.timeScale = timeScale;
+}
+['size','grav','wind','rho','ts'].forEach(id => $(id).addEventListener('input', sync));
+document.querySelectorAll('[data-g]').forEach(b => b.onclick = () => { $('grav').value = b.dataset.g; sync(); });
+document.querySelectorAll('[data-rho]').forEach(b => b.onclick = () => { $('rho').value = b.dataset.rho; sync(); });
+$('regen').onclick = () => { $('seed').value = String(Math.floor(Math.random()*90000)+10000); build($('seed').value); };
+$('reset').onclick = () => build($('seed').value);
+$('seed').addEventListener('change', () => build($('seed').value));
+$('pause').onclick = () => { paused = !paused; $('pause').textContent = paused ? 'Resume' : 'Pause'; };
+
+readColors();
+new MutationObserver(readColors).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme','class','style'] });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readColors);
+addEventListener('resize', resize);
+sync(); build($('seed').value); resize();
+if (matchMedia('(prefers-reduced-motion: reduce)').matches){ paused = true; $('pause').textContent = 'Resume'; }
+// settle a few steps so the first frame is meaningful
+for (let i = 0; i < 6; i++){ applyForces(DT_MS/1000); Engine.update(engine, DT_MS); }
+stats(); draw();
+requestAnimationFrame(t => { last = t; requestAnimationFrame(tick); });
+})();
+</script>
+
+</body></html>
