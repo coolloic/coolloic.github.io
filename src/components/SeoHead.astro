@@ -10,7 +10,7 @@ const jsonLd = {
   jobTitle: cv.positioning,
   email: `mailto:${cv.email}`,
   url: canonical,
-  sameAs: [cv.linkedin],
+  sameAs: [cv.linkedin, cv.blog],
   address: {
     '@type': 'PostalAddress',
     addressLocality: cv.location.split(',')[0].trim(),

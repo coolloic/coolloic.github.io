@@ -91,6 +91,8 @@ export interface CV {
   coreStack: string;
   email: string;
   linkedin: string;
+  /** Technical blog and AI knowledge wiki. */
+  blog: string;
   metaDescription: string;
   roles: Role[];
   earlierCareer: string;
@@ -119,6 +121,7 @@ const cv: CV = {
   coreStack: 'React & AWS',
   email: 'loic.wong@hotmail.com',
   linkedin: 'https://www.linkedin.com/in/loic-wong-49a66551/',
+  blog: 'https://coolloic.github.io/blog/',
   metaDescription:
     'Engineering lead and senior software engineer in Auckland with 18 years across React, TypeScript and AWS. Available now for contract or permanent work in New Zealand and Australia.',
 
@@ -386,7 +389,10 @@ const cv: CV = {
     },
     {
       label: 'Data',
-      items: ['PostgreSQL', 'DynamoDB', 'Sequelize', 'Query optimisation', 'Indexing'],
+      items: [
+        'PostgreSQL', 'MySQL', 'SQL Server', 'Oracle', 'IBM Db2', 'DynamoDB',
+        'Sequelize', 'Query optimisation', 'Indexing',
+      ],
     },
     {
       label: 'Testing',
